@@ -23,7 +23,7 @@ export function Footer() {
   ].filter((s) => s.href !== "");
 
   const phone = t("contact_phone", "06 00 00 00 00");
-  const email = t("contact_email", "contact@vrstudio.fr");
+  const email = t("contact_email", "contact@vrdigital.fr");
 
   return (
     <footer className="border-t border-border bg-background">
@@ -35,7 +35,7 @@ export function Footer() {
                 {t("brand_name", "VR")}
               </span>
               <span className="label-mono text-muted-foreground">
-                {t("brand_suffix", "Studio")}
+                {t("brand_suffix", "Digital")}
               </span>
             </p>
             <p className="text-muted-foreground mt-5 max-w-xs text-sm leading-relaxed">
@@ -122,7 +122,7 @@ export function Footer() {
         </div>
 
         <div className="text-muted-foreground mt-16 flex flex-col gap-4 border-t border-border pt-8 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>{t("footer_legal", "© VR Studio — Tous droits réservés")}</p>
+          <p>{t("footer_legal", "© VR Digital — Tous droits réservés")}</p>
           <ul className="flex flex-wrap gap-6">
             <li>
               <a href="/#contact" className="transition-colors hover:text-foreground">

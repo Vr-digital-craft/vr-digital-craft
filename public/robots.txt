@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://vrstudio.fr/sitemap.xml
+Sitemap: https://vrdigital.fr/sitemap.xml

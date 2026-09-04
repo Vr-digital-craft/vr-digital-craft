@@ -6,7 +6,7 @@ import { Header } from "@/components/site/Header";
 import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 
-const title = "Réalisations de sites internet | VR Studio Toulouse";
+const title = "Réalisations de sites internet | VR Digital Toulouse";
 const description =
   "Découvrez des sites internet modernes réalisés pour des restaurants, artisans, commerces et entreprises.";
 

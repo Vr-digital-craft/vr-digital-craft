@@ -71,15 +71,15 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Création Site Internet Toulouse | VR Studio" },
+      { title: "Création Site Internet Toulouse | VR Digital" },
       {
         name: "description",
         content:
           "Création de sites internet modernes pour artisans, restaurants, commerçants et entreprises.",
       },
-      { name: "author", content: "VR Studio" },
+      { name: "author", content: "VR Digital" },
       { name: "theme-color", content: "#000000" },
-      { property: "og:site_name", content: "VR Studio" },
+      { property: "og:site_name", content: "VR Digital" },
       { property: "og:locale", content: "fr_FR" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

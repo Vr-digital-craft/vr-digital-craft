@@ -15,7 +15,7 @@ import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 import type { SiteContent } from "@/lib/site-content-types";
 
-const fallbackTitle = "Création Site Internet Toulouse | VR Studio";
+const fallbackTitle = "Création Site Internet Toulouse | VR Digital";
 const fallbackDescription =
   "Création de sites internet modernes pour artisans, restaurants, commerçants et entreprises. Sites vitrines, refonte et solutions web sur mesure.";
 
@@ -51,11 +51,11 @@ export const Route = createFileRoute("/")({
           children: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ProfessionalService",
-            name: texts["brand_name"] || "VR Studio",
+            name: texts["brand_name"] || "VR Digital",
             description,
             areaServed: texts["seo_area"] || "Toulouse, France",
             serviceType: "Création de sites internet",
-            email: texts["contact_email"] || "contact@vrstudio.fr",
+            email: texts["contact_email"] || "contact@vrdigital.fr",
             telephone: texts["contact_phone_link"] || "+33600000000",
             address: {
               "@type": "PostalAddress",

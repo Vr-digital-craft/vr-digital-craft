@@ -6,7 +6,7 @@ export function Contact() {
   const t = useText();
   const phone = t("contact_phone", "06 00 00 00 00");
   const phoneLink = t("contact_phone_link", "+33600000000");
-  const email = t("contact_email", "contact@vrstudio.fr");
+  const email = t("contact_email", "contact@vrdigital.fr");
 
   return (
     <section id="contact" className="relative overflow-hidden">

@@ -6,7 +6,7 @@ import { Header } from "@/components/site/Header";
 import { Icon, SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 
-const title = "Création de sites web à Toulouse | Services VR Studio";
+const title = "Création de sites web à Toulouse | Services VR Digital";
 const description =
   "Sites vitrines, sites pour restaurants et artisans, refonte et outils web sur mesure à Toulouse et partout en France.";
 

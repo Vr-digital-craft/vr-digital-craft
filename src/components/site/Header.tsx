@@ -28,7 +28,7 @@ export function Header() {
   }, []);
 
   const brand = t("brand_name", "VR");
-  const suffix = t("brand_suffix", "Studio");
+  const suffix = t("brand_suffix", "Digital");
 
   return (
     <header

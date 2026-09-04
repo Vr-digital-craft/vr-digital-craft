@@ -1,6 +1,6 @@
 # VR Digital Craft
 
-Site vitrine indépendant de VR Studio, construit avec TanStack Start, React, Vite et Tailwind CSS.
+Site vitrine indépendant de VR Digital, construit avec TanStack Start, React, Vite et Tailwind CSS.
 
 ## Installation
 
@@ -20,4 +20,4 @@ pnpm start
 
 Le serveur de production est généré dans `.output`. Tous les contenus publics sont conservés dans `src/content/site-content.ts` et peuvent être modifiés directement dans le code.
 
-Avant la mise en ligne, remplacez le domaine `https://vrstudio.fr` dans `public/sitemap.xml` si votre domaine final est différent.
+Avant la mise en ligne, remplacez le domaine `https://vrdigital.fr` dans `public/sitemap.xml` si votre domaine final est différent.
