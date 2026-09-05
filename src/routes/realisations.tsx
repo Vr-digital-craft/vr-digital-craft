@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
@@ -11,6 +11,9 @@ const description =
   "Découvrez des sites internet modernes réalisés pour des restaurants, artisans, commerces et entreprises.";
 
 export const Route = createFileRoute("/realisations")({
+  beforeLoad: () => {
+    throw redirect({ to: "/" });
+  },
   loader: () => getSiteContent(),
   head: () => ({
     meta: [
