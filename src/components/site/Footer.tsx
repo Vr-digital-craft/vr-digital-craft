@@ -22,8 +22,8 @@ export function Footer() {
     { label: "LinkedIn", icon: Linkedin, href: t("social_linkedin") },
   ].filter((s) => s.href !== "");
 
-  const phone = t("contact_phone", "06 00 00 00 00");
-  const email = t("contact_email", "contact@vrdigital.fr");
+  const phone = t("contact_phone", "0786181786");
+  const email = t("contact_email", "vrdigital.contact@gmail.com");
 
   return (
     <footer className="border-t border-border bg-background">
@@ -95,7 +95,7 @@ export function Footer() {
             <ul className="text-muted-foreground mt-6 space-y-3 text-sm">
               <li>
                 <a
-                  href={`tel:${t("contact_phone_link", "+33600000000")}`}
+                  href={`tel:${t("contact_phone_link", "+33786181786")}`}
                   className="transition-colors hover:text-foreground"
                 >
                   {phone}

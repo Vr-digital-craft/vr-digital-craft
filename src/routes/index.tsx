@@ -55,8 +55,8 @@ export const Route = createFileRoute("/")({
             description,
             areaServed: texts["seo_area"] || "Toulouse, France",
             serviceType: "Création de sites internet",
-            email: texts["contact_email"] || "contact@vrdigital.fr",
-            telephone: texts["contact_phone_link"] || "+33600000000",
+            email: texts["contact_email"] || "vrdigital.contact@gmail.com",
+            telephone: texts["contact_phone_link"] || "+33786181786",
             address: {
               "@type": "PostalAddress",
               addressLocality: "Toulouse",

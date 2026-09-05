@@ -4,9 +4,9 @@ import { useText } from "./content";
 
 export function Contact() {
   const t = useText();
-  const phone = t("contact_phone", "06 00 00 00 00");
-  const phoneLink = t("contact_phone_link", "+33600000000");
-  const email = t("contact_email", "contact@vrdigital.fr");
+  const phone = t("contact_phone", "0786181786");
+  const phoneLink = t("contact_phone_link", "+33786181786");
+  const email = t("contact_email", "vrdigital.contact@gmail.com");
 
   return (
     <section id="contact" className="relative overflow-hidden">

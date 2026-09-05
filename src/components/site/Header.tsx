@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useSiteContent, useText } from "./content";
 
 const allLinks = [
+  { label: "Home", href: "/", section: "hero" },
   { label: "Réalisations", href: "/realisations", section: "work" },
   { label: "Services", href: "/services", section: "services" },
   { label: "À propos", href: "/#a-propos", section: "why" },
