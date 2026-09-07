@@ -14,6 +14,18 @@ export const templateRegistry: TemplateMetadata[] = [
     enabled: true,
   },
   {
+    id: "template-02",
+    name: "Restaurant chaleureux",
+    designType: "Éditorial, gourmand et chaleureux",
+    description:
+      "Une vitrine immersive pour raconter une cuisine, présenter la carte et faciliter les réservations.",
+    sectors: ["restaurant"],
+    previewImage: "/templates/template-02/restaurant-hero.jpg",
+    demoConfig: "templates/template-02/site.config.json",
+    version: 1,
+    enabled: true,
+  },
+  {
     id: "template-03",
     name: "Garage automobile",
     designType: "Automobile, dynamique et industriel",

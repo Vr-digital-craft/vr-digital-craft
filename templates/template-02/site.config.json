@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "La maison", "href": "#a-propos" },
+    { "label": "La carte", "href": "#menu" },
+    { "label": "Galerie", "href": "#galerie" },
+    { "label": "Infos", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Maison Églantine",
+    "tagline": "Cuisine de saison, moments à partager",
+    "activity": "Restaurant bistronomique",
+    "description": "Une table vivante où les produits de saison rencontrent une cuisine française généreuse et contemporaine.",
+    "phone": "05 61 00 00 00",
+    "email": "bonjour@maison-eglantine.fr",
+    "address": "12 rue des Carmes",
+    "city": "Toulouse",
+    "openingHours": ["Mardi – samedi : 12h – 14h", "Mardi – samedi : 19h – 22h30"]
+  },
+  "branding": {
+    "primaryColor": "#7b2636",
+    "secondaryColor": "#31443b",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Une cuisine sincère, au rythme des saisons.",
+      "subtitle": "Des assiettes gourmandes, des produits choisis avec soin et une salle chaleureuse pour vos déjeuners comme vos longues soirées.",
+      "image": {
+        "src": "/templates/template-02/restaurant-hero.jpg",
+        "alt": "Assiette de saison dressée avec soin"
+      },
+      "primaryAction": { "label": "Réserver une table", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "À la carte",
+      "title": "Quelques envies du moment",
+      "description": "Une carte courte qui évolue avec les arrivages, les producteurs et l'inspiration de notre cuisine.",
+      "items": [
+        {
+          "id": "entree",
+          "title": "Légumes du marché",
+          "description": "Crème légère aux herbes, condiment acidulé et jeunes pousses."
+        },
+        {
+          "id": "poisson",
+          "title": "Poisson de la criée",
+          "description": "Cuisson douce, légumes de saison et jus corsé aux agrumes."
+        },
+        {
+          "id": "viande",
+          "title": "Pièce du moment",
+          "description": "Viande française, garniture maraîchère et sauce mijotée."
+        },
+        {
+          "id": "dessert",
+          "title": "Douceur chocolat",
+          "description": "Chocolat noir, noisette torréfiée et crème glacée maison."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "Notre maison",
+      "title": "Le goût du produit, simplement.",
+      "description": "Ici, la cuisine se veut lisible, généreuse et précise. Notre équipe sélectionne des produits frais et compose une expérience détendue, du premier accueil au dernier café.",
+      "image": {
+        "src": "/templates/template-02/restaurant-interior.jpg",
+        "alt": "Salle chaleureuse du restaurant prête pour le service"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "La table, la salle, les gestes",
+      "images": [
+        {
+          "src": "/templates/template-02/restaurant-interior.jpg",
+          "alt": "Salle contemporaine et chaleureuse du restaurant"
+        },
+        {
+          "src": "/templates/template-02/restaurant-chef.jpg",
+          "alt": "Chef dressant une assiette en cuisine"
+        },
+        {
+          "src": "/templates/template-02/restaurant-hero.jpg",
+          "alt": "Plat signature de la maison"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "Des moments qui restent",
+      "items": [
+        {
+          "id": "avis-01",
+          "quote": "Une cuisine pleine de goût et un accueil vraiment attentionné.",
+          "author": "Camille",
+          "role": "Dîner en famille"
+        },
+        {
+          "id": "avis-02",
+          "quote": "Une carte courte, des produits frais et une très belle ambiance.",
+          "author": "Thomas",
+          "role": "Déjeuner"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Votre table vous attend",
+      "title": "Réservez votre prochain moment.",
+      "description": "Pour une réservation ou une demande de groupe, contactez-nous directement par téléphone ou par email.",
+      "phoneLabel": "Réserver par téléphone",
+      "emailLabel": "Écrire au restaurant",
+      "addressLabel": "Nous trouver",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Cuisine de saison et table chaleureuse à Toulouse.",
+      "copyright": "© Maison Églantine — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Maison Églantine | Restaurant à Toulouse",
+    "description": "Découvrez Maison Églantine, une table chaleureuse à Toulouse proposant une cuisine française de saison.",
+    "socialImage": "/templates/template-02/restaurant-hero.jpg"
+  }
+}
