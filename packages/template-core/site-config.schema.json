@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vrdigital.fr/schemas/site-config.v1.json",
+  "title": "VR Digital SiteConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "business", "branding", "content", "socialLinks", "seo"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "business": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "tagline",
+        "activity",
+        "description",
+        "phone",
+        "email",
+        "address",
+        "city",
+        "openingHours"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "tagline": { "type": "string" },
+        "activity": { "type": "string" },
+        "description": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "openingHours": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "branding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryColor", "secondaryColor", "logo", "favicon"],
+      "properties": {
+        "primaryColor": { "type": "string" },
+        "secondaryColor": { "type": "string" },
+        "logo": { "anyOf": [{ "$ref": "#/$defs/image" }, { "type": "null" }] },
+        "favicon": { "type": "string" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hero", "services", "about", "gallery", "testimonials", "faq"],
+      "properties": {
+        "hero": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "subtitle", "image", "primaryAction"],
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "image": { "anyOf": [{ "$ref": "#/$defs/image" }, { "type": "null" }] },
+            "primaryAction": { "$ref": "#/$defs/link" }
+          }
+        },
+        "services": { "type": "array", "items": { "$ref": "#/$defs/service" } },
+        "about": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "title", "description", "image"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "image": { "anyOf": [{ "$ref": "#/$defs/image" }, { "type": "null" }] }
+          }
+        },
+        "gallery": { "type": "array", "items": { "$ref": "#/$defs/image" } },
+        "testimonials": { "type": "array", "items": { "$ref": "#/$defs/testimonial" } },
+        "faq": { "type": "array", "items": { "$ref": "#/$defs/faq" } }
+      }
+    },
+    "socialLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["facebook", "instagram", "google"],
+      "properties": {
+        "facebook": { "type": "string" },
+        "instagram": { "type": "string" },
+        "google": { "type": "string" }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "description", "socialImage"],
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "socialImage": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src", "alt"],
+      "properties": { "src": { "type": "string" }, "alt": { "type": "string" } }
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "href"],
+      "properties": { "label": { "type": "string" }, "href": { "type": "string" } }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "description"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "$ref": "#/$defs/image" }
+      }
+    },
+    "testimonial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "quote", "author", "role"],
+      "properties": {
+        "id": { "type": "string" },
+        "quote": { "type": "string" },
+        "author": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "faq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "question", "answer"],
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "answer": { "type": "string" }
+      }
+    }
+  }
+}
