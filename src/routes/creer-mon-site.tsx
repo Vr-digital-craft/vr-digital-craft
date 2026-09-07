@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, CheckCircle2, ImagePlus, ShieldCheck } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
@@ -7,16 +7,17 @@ import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 import { createClientBriefDraft, type ClientBriefDraft } from "@/modules/projects/client-brief";
 import { generateProject, type ProjectAssets } from "@/modules/projects/generated-project";
-import { saveLocalProject } from "@/modules/projects/browser-project-store";
+import { getLocalProject, saveLocalProject } from "@/modules/projects/browser-project-store";
 import { templateRegistry } from "../../templates/registry";
 import artisanConfig from "../../templates/template-01/site.config.json";
 import type { SiteConfig } from "../../packages/template-core/src";
 
-type Search = { template: string };
+type Search = { template: string; project: string };
 
 export const Route = createFileRoute("/creer-mon-site")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     template: typeof search["template"] === "string" ? search["template"] : "",
+    project: typeof search["project"] === "string" ? search["project"] : "",
   }),
   loader: () => getSiteContent(),
   head: () => ({
@@ -35,17 +36,44 @@ const labelClass = "label-mono text-muted-foreground text-[0.65rem]";
 
 function CreateSitePage() {
   const content = Route.useLoaderData();
-  const { template: templateId } = Route.useSearch();
+  const { template: templateId, project: projectId } = Route.useSearch();
   const selectedTemplate = templateRegistry.find(
     (template) => template.id === templateId && template.enabled,
   );
   const [errors, setErrors] = useState<string[]>([]);
   const [draft, setDraft] = useState<ClientBriefDraft | null>(null);
+  const [formDefaults, setFormDefaults] = useState<ClientBriefDraft | null>(null);
   const [logoName, setLogoName] = useState("");
   const [photoNames, setPhotoNames] = useState<string[]>([]);
   const [assets, setAssets] = useState<ProjectAssets>({ logo: null, photos: [] });
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState("");
+
+  useEffect(() => {
+    if (!selectedTemplate) return;
+    const savedBrief = localStorage.getItem(`vr-digital:brief:${selectedTemplate.id}`);
+    if (savedBrief) {
+      try {
+        const parsed = JSON.parse(savedBrief) as ClientBriefDraft;
+        setFormDefaults(parsed);
+        setLogoName(parsed.logoName);
+        setPhotoNames(parsed.photoNames);
+      } catch {
+        localStorage.removeItem(`vr-digital:brief:${selectedTemplate.id}`);
+      }
+    }
+
+    if (projectId) {
+      getLocalProject(projectId)
+        .then((stored) => {
+          if (!stored) return;
+          setAssets(stored.assets);
+          setLogoName(stored.assets.logo?.name ?? "");
+          setPhotoNames(stored.assets.photos.map((photo) => photo.name));
+        })
+        .catch(() => setGenerationError("Les images du projet n'ont pas pu être rechargées."));
+    }
+  }, [projectId, selectedTemplate]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -114,7 +142,10 @@ function CreateSitePage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() => setDraft(null)}
+                  onClick={() => {
+                    setFormDefaults(draft);
+                    setDraft(null);
+                  }}
                   className="label-mono rounded-md border border-border px-5 py-4 text-xs hover:border-neon"
                 >
                   Modifier les informations
@@ -160,19 +191,47 @@ function CreateSitePage() {
                 <div className="space-y-12">
                   <FormSection number="01" title="Votre entreprise">
                     <div className="grid gap-6 sm:grid-cols-2">
-                      <Field label="Nom de l'entreprise *" name="companyName" required />
-                      <Field label="Slogan" name="tagline" />
+                      <Field
+                        label="Nom de l'entreprise *"
+                        name="companyName"
+                        defaultValue={formDefaults?.companyName}
+                        required
+                      />
+                      <Field label="Slogan" name="tagline" defaultValue={formDefaults?.tagline} />
                       <Field
                         label="Activité *"
                         name="activity"
+                        defaultValue={formDefaults?.activity}
                         required
                         placeholder="Ex. Maçonnerie et rénovation"
                       />
-                      <Field label="Ville *" name="city" required />
-                      <Field label="Téléphone *" name="phone" type="tel" required />
-                      <Field label="E-mail *" name="email" type="email" required />
-                      <Field label="Adresse" name="address" />
-                      <Field label="Horaires" name="openingHours" placeholder="Lun–Ven : 8h–18h" />
+                      <Field
+                        label="Ville *"
+                        name="city"
+                        defaultValue={formDefaults?.city}
+                        required
+                      />
+                      <Field
+                        label="Téléphone *"
+                        name="phone"
+                        type="tel"
+                        defaultValue={formDefaults?.phone}
+                        required
+                      />
+                      <Field
+                        label="E-mail *"
+                        name="email"
+                        type="email"
+                        defaultValue={formDefaults?.email}
+                        required
+                      />
+                      <Field label="Adresse" name="address" defaultValue={formDefaults?.address} />
+                      <Field
+                        label="Horaires"
+                        name="openingHours"
+                        defaultValue={formDefaults?.openingHours}
+                        placeholder="Lun–Ven : 8h–18h"
+                      />
                     </div>
                   </FormSection>
 
@@ -181,12 +240,14 @@ function CreateSitePage() {
                       <TextArea
                         label="Description de l'activité *"
                         name="description"
+                        defaultValue={formDefaults?.description}
                         required
                         placeholder="Que propose votre entreprise ?"
                       />
                       <TextArea
                         label="Décrivez votre entreprise en quelques phrases *"
                         name="companyStory"
+                        defaultValue={formDefaults?.companyStory}
                         required
                         rows={6}
                         placeholder="Votre histoire, vos valeurs, votre façon de travailler et ce qui vous différencie..."
@@ -194,6 +255,7 @@ function CreateSitePage() {
                       <TextArea
                         label="Prestations et services"
                         name="services"
+                        defaultValue={formDefaults?.services.join("\n")}
                         rows={6}
                         placeholder={
                           "Un service par ligne : Nom | Description\nConstruction | Murs, extensions et dalles\nRénovation | Transformation de bâtiments anciens"
@@ -207,12 +269,12 @@ function CreateSitePage() {
                       <ColorField
                         label="Couleur principale"
                         name="primaryColor"
-                        defaultValue="#d95d25"
+                        defaultValue={formDefaults?.colors.primary || "#d95d25"}
                       />
                       <ColorField
                         label="Couleur secondaire"
                         name="secondaryColor"
-                        defaultValue="#17324d"
+                        defaultValue={formDefaults?.colors.secondary || "#17324d"}
                       />
                       <FileField
                         label="Logo"
@@ -241,18 +303,21 @@ function CreateSitePage() {
                       <Field
                         label="Lien Facebook"
                         name="facebook"
+                        defaultValue={formDefaults?.socialLinks.facebook}
                         type="url"
                         placeholder="https://..."
                       />
                       <Field
                         label="Lien Instagram"
                         name="instagram"
+                        defaultValue={formDefaults?.socialLinks.instagram}
                         type="url"
                         placeholder="https://..."
                       />
                       <Field
                         label="Fiche Google"
                         name="google"
+                        defaultValue={formDefaults?.socialLinks.google}
                         type="url"
                         placeholder="https://..."
                       />
@@ -335,12 +400,14 @@ function Field({
   type = "text",
   required,
   placeholder,
+  defaultValue,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
   placeholder?: string;
+  defaultValue?: string | undefined;
 }) {
   return (
     <label>
@@ -351,6 +418,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        defaultValue={defaultValue}
       />
     </label>
   );
@@ -362,12 +430,14 @@ function TextArea({
   required,
   rows = 4,
   placeholder,
+  defaultValue,
 }: {
   label: string;
   name: string;
   required?: boolean;
   rows?: number;
   placeholder?: string;
+  defaultValue?: string | undefined;
 }) {
   return (
     <label>
@@ -378,6 +448,7 @@ function TextArea({
         required={required}
         rows={rows}
         placeholder={placeholder}
+        defaultValue={defaultValue}
       />
     </label>
   );

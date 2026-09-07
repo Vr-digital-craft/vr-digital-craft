@@ -68,7 +68,7 @@ function ProjectPreviewPage() {
     <div>
       <div className="fixed inset-x-0 bottom-4 z-[100] mx-auto flex w-[calc(100%-1.5rem)] max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border border-white/15 bg-black/90 p-2 text-white shadow-2xl backdrop-blur-xl">
         <a
-          href={`/creer-mon-site?template=${project.templateId}`}
+          href={`/creer-mon-site?template=${project.templateId}&project=${project.id}`}
           className="label-mono flex items-center gap-2 px-3 py-3 text-[0.65rem] hover:text-neon"
         >
           <ArrowLeft className="size-4" />
