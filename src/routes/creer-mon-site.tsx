@@ -9,8 +9,7 @@ import { createClientBriefDraft, type ClientBriefDraft } from "@/modules/project
 import { generateProject, type ProjectAssets } from "@/modules/projects/generated-project";
 import { getLocalProject, saveLocalProject } from "@/modules/projects/browser-project-store";
 import { templateRegistry } from "../../templates/registry";
-import artisanConfig from "../../templates/template-01/site.config.json";
-import type { SiteConfig } from "../../packages/template-core/src";
+import { runtimeTemplates } from "../../templates/runtime";
 
 type Search = { template: string; project: string };
 
@@ -98,7 +97,9 @@ function CreateSitePage() {
     setGenerating(true);
     setGenerationError("");
     try {
-      const project = generateProject(draft, artisanConfig as SiteConfig, selectedTemplate.version);
+      const runtimeTemplate = runtimeTemplates[selectedTemplate.id];
+      if (!runtimeTemplate) throw new Error("Modèle indisponible");
+      const project = generateProject(draft, runtimeTemplate.config, selectedTemplate.version);
       await saveLocalProject(project, assets);
       window.location.assign(`/apercu/${project.id}`);
     } catch {

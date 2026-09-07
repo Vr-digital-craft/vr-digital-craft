@@ -108,20 +108,34 @@ export function applyLocalAssets(project: GeneratedProject, assets: ProjectAsset
     return url;
   };
 
+  const photoUrls = assets.photos.map((photo) => assetUrl(photo));
+
   if (assets.logo) {
     config.branding.logo = { src: assetUrl(assets.logo), alt: `Logo ${config.business.name}` };
   }
-  if (assets.photos[0]) {
+  if (photoUrls[0]) {
     config.content.hero.image = {
-      src: assetUrl(assets.photos[0]),
+      src: photoUrls[0],
       alt: `${config.business.activity} — ${config.business.name}`,
     };
   }
-  if (assets.photos[1]) {
+  if (photoUrls[1] || photoUrls[0]) {
     config.content.about.image = {
-      src: assetUrl(assets.photos[1]),
+      src: photoUrls[1] ?? photoUrls[0]!,
       alt: `${config.business.name} à ${config.business.city}`,
     };
+  }
+  if (photoUrls.length) {
+    config.content.gallery.images = photoUrls.map((src, index) => ({
+      src,
+      alt: `${config.business.name} — réalisation ${index + 1}`,
+    }));
+    config.content.services.items = config.content.services.items.map((service, index) => {
+      const src = photoUrls[index + 1];
+      return src
+        ? { ...service, image: { src, alt: `${service.title} — ${config.business.name}` } }
+        : service;
+    });
   }
 
   return { config, revoke: () => objectUrls.forEach((url) => URL.revokeObjectURL(url)) };

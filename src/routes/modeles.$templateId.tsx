@@ -1,23 +1,14 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ArrowLeft, LayoutTemplate } from "lucide-react";
-import type { SiteConfig } from "../../packages/template-core/src";
-import artisanConfig from "../../templates/template-01/site.config.json";
-import { ArtisanTemplate } from "../../templates/template-01/src/Template";
-
-const availableTemplates = {
-  "template-01": {
-    name: "Artisan moderne",
-    config: artisanConfig as SiteConfig,
-    Component: ArtisanTemplate,
-  },
-};
+import { runtimeTemplates } from "../../templates/runtime";
 
 export const Route = createFileRoute("/modeles/$templateId")({
   beforeLoad: ({ params }) => {
-    if (!(params.templateId in availableTemplates)) throw notFound();
+    if (!(params.templateId in runtimeTemplates)) throw notFound();
   },
   head: ({ params }) => {
-    const template = availableTemplates[params.templateId as keyof typeof availableTemplates];
+    const template = runtimeTemplates[params.templateId];
+    if (!template) throw notFound();
     return {
       meta: [
         { title: `${template.name} — Démonstration | VR Digital` },
@@ -30,7 +21,8 @@ export const Route = createFileRoute("/modeles/$templateId")({
 
 function TemplateDemoPage() {
   const { templateId } = Route.useParams();
-  const template = availableTemplates[templateId as keyof typeof availableTemplates];
+  const template = runtimeTemplates[templateId];
+  if (!template) return null;
   const Template = template.Component;
 
   return (

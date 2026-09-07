@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Prestations", "href": "#services" },
+    { "label": "Atelier", "href": "#a-propos" },
+    { "label": "Réalisations", "href": "#realisations" },
+    { "label": "Avis", "href": "#avis" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Garage Horizon",
+    "tagline": "Votre voiture. Notre exigence.",
+    "activity": "Entretien et réparation automobile",
+    "description": "Un atelier automobile indépendant pour l'entretien, le diagnostic et la réparation de votre véhicule, toutes marques.",
+    "phone": "05 61 00 00 00",
+    "email": "contact@garage-horizon.fr",
+    "address": "18 avenue de l'Industrie",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 8h – 18h30", "Samedi : 8h30 – 12h30"]
+  },
+  "branding": {
+    "primaryColor": "#ef2b2d",
+    "secondaryColor": "#111316",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "La mécanique sans détour.",
+      "subtitle": "Entretien, diagnostic et réparation toutes marques. Une équipe expérimentée, des explications claires et un véhicule suivi avec précision.",
+      "image": {
+        "src": "/templates/template-03/garage-hero.jpg",
+        "alt": "Mécanicien intervenant sur un véhicule dans un atelier automobile"
+      },
+      "primaryAction": { "label": "Prendre rendez-vous", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "Nos prestations",
+      "title": "Tout ce dont votre véhicule a besoin.",
+      "description": "De la révision courante à la recherche de panne, chaque intervention commence par un diagnostic précis.",
+      "items": [
+        {
+          "id": "entretien",
+          "title": "Entretien & révision",
+          "description": "Vidange, filtres, niveaux et révision constructeur pour préserver les performances de votre véhicule."
+        },
+        {
+          "id": "diagnostic",
+          "title": "Diagnostic électronique",
+          "description": "Lecture des défauts, recherche de panne et contrôle des systèmes électroniques embarqués.",
+          "image": {
+            "src": "/templates/template-03/garage-diagnostic.jpg",
+            "alt": "Diagnostic électronique réalisé sur un véhicule"
+          }
+        },
+        {
+          "id": "freinage",
+          "title": "Freinage",
+          "description": "Contrôle et remplacement des plaquettes, disques et éléments du système de freinage.",
+          "image": {
+            "src": "/templates/template-03/garage-brakes.jpg",
+            "alt": "Intervention sur le système de freinage d'une voiture"
+          }
+        },
+        {
+          "id": "pneumatiques",
+          "title": "Pneumatiques",
+          "description": "Montage, équilibrage, permutation et contrôle de l'usure pour rouler en toute confiance."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "L'atelier",
+      "title": "Un diagnostic juste. Une réparation utile.",
+      "description": "Nous prenons le temps d'expliquer chaque intervention avant de commencer. Vous savez ce qui est nécessaire, pourquoi et comment votre véhicule sera pris en charge.",
+      "image": {
+        "src": "/templates/template-03/garage-diagnostic.jpg",
+        "alt": "Mécanicien utilisant un outil de diagnostic automobile"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Dans notre atelier",
+      "images": [
+        {
+          "src": "/templates/template-03/garage-hero.jpg",
+          "alt": "Véhicule pris en charge dans l'atelier"
+        },
+        {
+          "src": "/templates/template-03/garage-diagnostic.jpg",
+          "alt": "Diagnostic d'un moteur automobile"
+        },
+        {
+          "src": "/templates/template-03/garage-brakes.jpg",
+          "alt": "Entretien du système de freinage"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "La confiance se gagne sur la route.",
+      "items": [
+        {
+          "id": "avis-01",
+          "quote": "Des explications claires, un délai respecté et aucune mauvaise surprise.",
+          "author": "Client du garage",
+          "role": "Entretien annuel"
+        },
+        {
+          "id": "avis-02",
+          "quote": "Panne identifiée rapidement et véhicule récupéré le jour même.",
+          "author": "Cliente du garage",
+          "role": "Diagnostic"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Rendez-vous atelier",
+      "title": "Parlons de votre véhicule.",
+      "description": "Appelez-nous ou envoyez votre demande. Nous vous proposons un créneau adapté et confirmons l'intervention avant votre venue.",
+      "phoneLabel": "Appeler l'atelier",
+      "emailLabel": "Demander un rendez-vous",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Entretien et réparation automobile à Toulouse.",
+      "copyright": "© Garage Horizon — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Garage automobile à Toulouse | Garage Horizon",
+    "description": "Garage Horizon assure l'entretien, le diagnostic, le freinage et les pneumatiques de votre véhicule à Toulouse.",
+    "socialImage": "/templates/template-03/garage-hero.jpg"
+  }
+}

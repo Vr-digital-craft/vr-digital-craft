@@ -13,4 +13,16 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-03",
+    name: "Garage automobile",
+    designType: "Automobile, dynamique et industriel",
+    description:
+      "Une vitrine immédiatement identifiable pour présenter un atelier et faciliter la prise de rendez-vous.",
+    sectors: ["automobile"],
+    previewImage: "/templates/template-03/garage-hero.jpg",
+    demoConfig: "templates/template-03/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];

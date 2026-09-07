@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Download, LoaderCircle, LockKeyhole } from "lucide-react";
 import type { SiteConfig } from "../../packages/template-core/src";
-import { ArtisanTemplate } from "../../templates/template-01/src/Template";
+import { runtimeTemplates } from "../../templates/runtime";
 import { applyLocalAssets, type GeneratedProject } from "@/modules/projects/generated-project";
 import { getLocalProject } from "@/modules/projects/browser-project-store";
 
@@ -30,7 +30,7 @@ function ProjectPreviewPage() {
           setError("Cette prévisualisation locale est introuvable dans ce navigateur.");
           return;
         }
-        if (stored.project.templateId !== "template-01") {
+        if (!runtimeTemplates[stored.project.templateId]) {
           setError("Le modèle associé à ce projet n'est pas disponible.");
           return;
         }
@@ -61,6 +61,14 @@ function ProjectPreviewPage() {
         title="Création de la prévisualisation"
         description="Chargement du projet enregistré dans votre navigateur."
         loading
+      />
+    );
+  const Template = runtimeTemplates[project.templateId]?.Component;
+  if (!Template)
+    return (
+      <PreviewMessage
+        title="Modèle indisponible"
+        description="Le modèle associé à ce projet n'est plus disponible."
       />
     );
 
@@ -97,7 +105,7 @@ function ProjectPreviewPage() {
           </button>
         </div>
       </div>
-      <ArtisanTemplate config={config} />
+      <Template config={config} />
     </div>
   );
 }
