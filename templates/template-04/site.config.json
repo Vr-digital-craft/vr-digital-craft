@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "L'institut", "href": "#a-propos" },
+    { "label": "Soins & tarifs", "href": "#services" },
+    { "label": "Équipe", "href": "#equipe" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Maison Alba",
+    "tagline": "Votre beauté, votre équilibre",
+    "activity": "Institut de beauté & bien-être",
+    "description": "Un lieu calme et attentionné dédié aux soins du visage, du corps et à votre bien-être.",
+    "phone": "05 61 00 00 00",
+    "email": "bonjour@maison-alba.fr",
+    "address": "8 rue des Arts",
+    "city": "Toulouse",
+    "openingHours": ["Mardi – vendredi : 9h – 19h", "Samedi : 9h – 18h"]
+  },
+  "branding": {
+    "primaryColor": "#a6574c",
+    "secondaryColor": "#382d2a",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Prenez le temps de vous retrouver.",
+      "subtitle": "Des soins sur mesure, des gestes experts et une atmosphère douce pour révéler votre beauté naturelle.",
+      "image": {
+        "src": "/templates/template-04/beauty-hero.jpg",
+        "alt": "Soin relaxant dans un institut élégant"
+      },
+      "primaryAction": { "label": "Prendre rendez-vous", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "La carte des soins",
+      "title": "Des rituels pensés pour vous.",
+      "description": "Chaque rendez-vous commence par un échange afin d'adapter le soin à vos envies et aux besoins de votre peau.",
+      "items": [
+        {
+          "id": "visage",
+          "title": "Soin visage éclat",
+          "description": "60 min · Nettoyage, massage et masque personnalisé — 75 €",
+          "image": {
+            "src": "/templates/template-04/beauty-treatment.jpg",
+            "alt": "Massage du visage réalisé avec soin"
+          }
+        },
+        {
+          "id": "massage",
+          "title": "Massage signature",
+          "description": "75 min · Un massage enveloppant pour dénouer les tensions — 90 €"
+        },
+        {
+          "id": "corps",
+          "title": "Rituel corps",
+          "description": "90 min · Gommage, enveloppement et massage relaxant — 115 €"
+        },
+        {
+          "id": "beaute",
+          "title": "Mise en beauté",
+          "description": "45 min · Conseil personnalisé et maquillage naturel — 55 €"
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "Maison Alba",
+      "title": "Une parenthèse rien qu'à vous.",
+      "description": "Notre institut associe expertise, écoute et produits soigneusement sélectionnés. Dans un décor apaisant, chaque détail est pensé pour vous offrir un moment profondément ressourçant.",
+      "image": {
+        "src": "/templates/template-04/beauty-treatment.jpg",
+        "alt": "Soin du visage personnalisé"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "L'univers Maison Alba",
+      "images": [
+        { "src": "/templates/template-04/beauty-hero.jpg", "alt": "Cabine de soin lumineuse" },
+        {
+          "src": "/templates/template-04/beauty-treatment.jpg",
+          "alt": "Massage relaxant du visage"
+        },
+        {
+          "src": "/templates/template-04/beauty-team.jpg",
+          "alt": "Équipe professionnelle de l'institut"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "Elles parlent de leur expérience",
+      "items": [
+        {
+          "id": "avis-01",
+          "quote": "Un vrai moment de douceur, avec des conseils précis et beaucoup d'attention.",
+          "author": "Élodie",
+          "role": "Soin visage"
+        },
+        {
+          "id": "avis-02",
+          "quote": "L'accueil est chaleureux et le massage m'a fait un bien immense.",
+          "author": "Sarah",
+          "role": "Massage signature"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Votre rendez-vous",
+      "title": "Accordez-vous cette parenthèse.",
+      "description": "Contactez-nous directement pour choisir votre soin et trouver le créneau qui vous convient.",
+      "phoneLabel": "Appeler l'institut",
+      "emailLabel": "Écrire à l'équipe",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Soins et bien-être à Toulouse.",
+      "copyright": "© Maison Alba — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Maison Alba | Institut de beauté à Toulouse",
+    "description": "Soins du visage, massages et rituels bien-être sur mesure chez Maison Alba à Toulouse.",
+    "socialImage": "/templates/template-04/beauty-hero.jpg"
+  }
+}

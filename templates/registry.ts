@@ -37,4 +37,16 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-04",
+    name: "Beauté & bien-être",
+    designType: "Doux, élégant et premium",
+    description:
+      "Une expérience apaisante pour présenter les soins, les tarifs et faciliter la prise de rendez-vous.",
+    sectors: ["beaute-bien-etre"],
+    previewImage: "/templates/template-04/beauty-hero.jpg",
+    demoConfig: "templates/template-04/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];
