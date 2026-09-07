@@ -14,6 +14,7 @@ import { Route as CreerMonSiteRouteImport } from './routes/creer-mon-site'
 import { Route as ModelesRouteImport } from './routes/modeles'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ApercuProjectIdRouteImport } from './routes/apercu.$projectId'
 import { Route as ModelesTemplateIdRouteImport } from './routes/modeles.$templateId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApercuProjectIdRoute = ApercuProjectIdRouteImport.update({
+  id: '/apercu/$projectId',
+  path: '/apercu/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModelesTemplateIdRoute = ModelesTemplateIdRouteImport.update({
   id: '/$templateId',
   path: '/$templateId',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/apercu/$projectId': typeof ApercuProjectIdRoute
   '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/apercu/$projectId': typeof ApercuProjectIdRoute
   '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/apercu/$projectId': typeof ApercuProjectIdRoute
   '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/modeles'
     | '/realisations'
     | '/services'
+    | '/apercu/$projectId'
     | '/modeles/$templateId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/modeles'
     | '/realisations'
     | '/services'
+    | '/apercu/$projectId'
     | '/modeles/$templateId'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/modeles'
     | '/realisations'
     | '/services'
+    | '/apercu/$projectId'
     | '/modeles/$templateId'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   ModelesRoute: typeof ModelesRouteWithChildren
   RealisationsRoute: typeof RealisationsRoute
   ServicesRoute: typeof ServicesRoute
+  ApercuProjectIdRoute: typeof ApercuProjectIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -144,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apercu/$projectId': {
+      id: '/apercu/$projectId'
+      path: '/apercu/$projectId'
+      fullPath: '/apercu/$projectId'
+      preLoaderRoute: typeof ApercuProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modeles/$templateId': {
       id: '/modeles/$templateId'
       path: '/$templateId'
@@ -171,6 +191,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModelesRoute: ModelesRouteWithChildren,
   RealisationsRoute: RealisationsRoute,
   ServicesRoute: ServicesRoute,
+  ApercuProjectIdRoute: ApercuProjectIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

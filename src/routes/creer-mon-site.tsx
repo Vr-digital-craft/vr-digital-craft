@@ -6,7 +6,11 @@ import { Header } from "@/components/site/Header";
 import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 import { createClientBriefDraft, type ClientBriefDraft } from "@/modules/projects/client-brief";
+import { generateProject, type ProjectAssets } from "@/modules/projects/generated-project";
+import { saveLocalProject } from "@/modules/projects/browser-project-store";
 import { templateRegistry } from "../../templates/registry";
+import artisanConfig from "../../templates/template-01/site.config.json";
+import type { SiteConfig } from "../../packages/template-core/src";
 
 type Search = { template: string };
 
@@ -39,16 +43,39 @@ function CreateSitePage() {
   const [draft, setDraft] = useState<ClientBriefDraft | null>(null);
   const [logoName, setLogoName] = useState("");
   const [photoNames, setPhotoNames] = useState<string[]>([]);
+  const [assets, setAssets] = useState<ProjectAssets>({ logo: null, photos: [] });
+  const [generating, setGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState("");
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedTemplate) return;
-    const result = createClientBriefDraft(selectedTemplate.id, new FormData(event.currentTarget));
+    const formData = new FormData(event.currentTarget);
+    const result = createClientBriefDraft(selectedTemplate.id, formData);
     setErrors(result.errors);
     setDraft(result.draft);
     if (result.draft) {
-      sessionStorage.setItem("vr-digital:client-brief", JSON.stringify(result.draft));
+      localStorage.setItem(`vr-digital:brief:${selectedTemplate.id}`, JSON.stringify(result.draft));
+      const logo = formData.get("logo");
+      const photos = formData
+        .getAll("photos")
+        .filter((item): item is File => item instanceof File && item.size > 0);
+      setAssets({ logo: logo instanceof File && logo.size > 0 ? logo : null, photos });
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  async function handleGenerate() {
+    if (!draft || !selectedTemplate) return;
+    setGenerating(true);
+    setGenerationError("");
+    try {
+      const project = generateProject(draft, artisanConfig as SiteConfig, selectedTemplate.version);
+      await saveLocalProject(project, assets);
+      window.location.assign(`/apercu/${project.id}`);
+    } catch {
+      setGenerationError("La prévisualisation n'a pas pu être enregistrée dans ce navigateur.");
+      setGenerating(false);
     }
   }
 
@@ -92,14 +119,21 @@ function CreateSitePage() {
                 >
                   Modifier les informations
                 </button>
-                <span
-                  className="label-mono flex cursor-not-allowed items-center gap-2 rounded-md bg-neon px-5 py-4 text-xs text-primary-foreground opacity-60"
-                  title="Disponible à l'étape 5"
+                <button
+                  type="button"
+                  onClick={handleGenerate}
+                  disabled={generating}
+                  className="label-mono flex items-center gap-2 rounded-md bg-neon px-5 py-4 text-xs text-primary-foreground disabled:opacity-60"
                 >
-                  Générer la prévisualisation
+                  {generating ? "Génération..." : "Générer la prévisualisation"}
                   <ArrowRight className="size-4" />
-                </span>
+                </button>
               </div>
+              {generationError && (
+                <p role="alert" className="mt-5 text-sm text-red-300">
+                  {generationError}
+                </p>
+              )}
             </section>
           ) : (
             <>
@@ -162,7 +196,7 @@ function CreateSitePage() {
                         name="services"
                         rows={6}
                         placeholder={
-                          "Un service par ligne\nConstruction\nRénovation\nAménagement extérieur"
+                          "Un service par ligne : Nom | Description\nConstruction | Murs, extensions et dalles\nRénovation | Transformation de bâtiments anciens"
                         }
                       />
                     </div>
@@ -184,14 +218,20 @@ function CreateSitePage() {
                         label="Logo"
                         name="logo"
                         value={logoName}
-                        onChange={(files) => setLogoName(files[0]?.name ?? "")}
+                        onChange={(files) => {
+                          setLogoName(files[0]?.name ?? "");
+                          setAssets((current) => ({ ...current, logo: files[0] ?? null }));
+                        }}
                       />
                       <FileField
                         label="Photos"
                         name="photos"
                         value={photoNames.join(", ")}
                         multiple
-                        onChange={(files) => setPhotoNames(files.map((file) => file.name))}
+                        onChange={(files) => {
+                          setPhotoNames(files.map((file) => file.name));
+                          setAssets((current) => ({ ...current, photos: files }));
+                        }}
                       />
                     </div>
                   </FormSection>
