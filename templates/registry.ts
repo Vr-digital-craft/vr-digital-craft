@@ -61,4 +61,16 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-06",
+    name: "Immobilier premium",
+    designType: "Épuré, premium et photographique",
+    description:
+      "Une vitrine élégante pour valoriser les biens, l'expertise locale et les demandes d'estimation.",
+    sectors: ["immobilier"],
+    previewImage: "/templates/template-06/real-estate-hero.jpg",
+    demoConfig: "templates/template-06/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];

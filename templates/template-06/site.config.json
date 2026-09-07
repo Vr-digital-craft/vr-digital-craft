@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Biens", "href": "#biens" },
+    { "label": "L'agence", "href": "#agence" },
+    { "label": "Secteur", "href": "#secteur" },
+    { "label": "Estimation", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Atelier Immobilier",
+    "tagline": "Des lieux singuliers, des projets de vie",
+    "activity": "Agence immobilière",
+    "description": "Une agence indépendante spécialisée dans les biens de caractère et l'accompagnement sur mesure.",
+    "phone": "05 61 00 00 00",
+    "email": "contact@atelier-immobilier.fr",
+    "address": "16 place des Carmes",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 9h – 19h", "Samedi : sur rendez-vous"]
+  },
+  "branding": {
+    "primaryColor": "#b79a68",
+    "secondaryColor": "#152522",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "L'immobilier, avec une autre perspective.",
+      "subtitle": "Des biens choisis avec exigence et un accompagnement précis, de la première visite jusqu'à la signature.",
+      "image": {
+        "src": "/templates/template-06/real-estate-hero.jpg",
+        "alt": "Villa contemporaine en pierre dans un jardin paysager"
+      },
+      "primaryAction": { "label": "Découvrir nos biens", "href": "#biens" }
+    },
+    "services": {
+      "eyebrow": "Biens à la une",
+      "title": "Des adresses qui ne ressemblent qu'à vous.",
+      "description": "Découvrez une sélection de propriétés choisies pour leur emplacement, leur architecture et leur potentiel.",
+      "items": [
+        {
+          "id": "appartement",
+          "title": "Appartement de caractère",
+          "description": "Toulouse centre · 4 pièces · 128 m²",
+          "image": {
+            "src": "/templates/template-06/real-estate-interior.jpg",
+            "alt": "Appartement lumineux avec moulures et grandes fenêtres"
+          }
+        },
+        {
+          "id": "villa",
+          "title": "Villa contemporaine",
+          "description": "Coteaux toulousains · 6 pièces · 240 m²",
+          "image": {
+            "src": "/templates/template-06/real-estate-hero.jpg",
+            "alt": "Villa contemporaine avec jardin"
+          }
+        },
+        {
+          "id": "quartier",
+          "title": "Maison de ville",
+          "description": "Quartier recherché · 5 pièces · 165 m²",
+          "image": {
+            "src": "/templates/template-06/real-estate-neighborhood.jpg",
+            "alt": "Rue résidentielle élégante"
+          }
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "Notre agence",
+      "title": "Votre projet mérite une écoute attentive.",
+      "description": "Estimation, vente ou recherche : nous associons connaissance du marché, regard architectural et disponibilité pour prendre les bonnes décisions à chaque étape.",
+      "image": {
+        "src": "/templates/template-06/real-estate-neighborhood.jpg",
+        "alt": "Quartier résidentiel du secteur de l'agence"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Notre secteur, notre expertise",
+      "images": [
+        {
+          "src": "/templates/template-06/real-estate-neighborhood.jpg",
+          "alt": "Quartier résidentiel recherché"
+        },
+        {
+          "src": "/templates/template-06/real-estate-interior.jpg",
+          "alt": "Intérieur d'un appartement de caractère"
+        },
+        {
+          "src": "/templates/template-06/real-estate-hero.jpg",
+          "alt": "Propriété premium avec jardin"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "La confiance au cœur de chaque projet",
+      "items": [
+        {
+          "id": "avis-01",
+          "quote": "Une estimation juste, une présentation remarquable et une vente parfaitement accompagnée.",
+          "author": "Sophie & Marc",
+          "role": "Vendeurs"
+        },
+        {
+          "id": "avis-02",
+          "quote": "L'équipe a compris notre recherche et nous a fait gagner un temps précieux.",
+          "author": "Claire",
+          "role": "Acquéreuse"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Estimation & projet",
+      "title": "Parlons de votre bien.",
+      "description": "Confiez-nous votre projet pour recevoir un premier avis personnalisé et confidentiel.",
+      "phoneLabel": "Appeler l'agence",
+      "emailLabel": "Demander une estimation",
+      "addressLabel": "L'agence",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Immobilier de caractère à Toulouse.",
+      "copyright": "© Atelier Immobilier — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Atelier Immobilier | Agence immobilière à Toulouse",
+    "description": "Biens de caractère, estimation et accompagnement immobilier personnalisé à Toulouse.",
+    "socialImage": "/templates/template-06/real-estate-hero.jpg"
+  }
+}

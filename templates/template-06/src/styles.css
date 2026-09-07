@@ -1,0 +1,362 @@
+.estate-site {
+  background: #f4f1ea;
+  color: #17231f;
+  font-family: "DM Sans", sans-serif;
+}
+.estate-site * {
+  box-sizing: border-box;
+}
+.estate-site img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+.estate-site a {
+  color: inherit;
+  text-decoration: none;
+}
+.estate-site h1,
+.estate-site h2,
+.estate-site h3,
+.estate-brand strong {
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+.estate-site > header {
+  align-items: center;
+  background: #f4f1ea;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  min-height: 95px;
+  padding: 15px 5vw;
+}
+.estate-brand {
+  display: flex;
+  flex-direction: column;
+}
+.estate-brand strong {
+  font-size: 25px;
+}
+.estate-brand small {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.estate-brand img {
+  height: 56px;
+  object-fit: contain;
+  width: auto;
+}
+.estate-site nav {
+  display: flex;
+  gap: 32px;
+}
+.estate-site nav a {
+  font-size: 13px;
+}
+.estate-call {
+  align-items: center;
+  display: flex;
+  font-size: 13px;
+  gap: 9px;
+  justify-self: end;
+}
+.estate-call svg {
+  height: 17px;
+}
+.estate-menu {
+  display: none;
+}
+.estate-hero {
+  height: calc(100vh - 95px);
+  min-height: 650px;
+  position: relative;
+}
+.estate-shade {
+  background: linear-gradient(90deg, rgba(14, 31, 26, 0.72), transparent 72%);
+  inset: 0;
+  position: absolute;
+}
+.estate-hero-copy {
+  color: white;
+  left: 8vw;
+  max-width: 720px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.estate-hero-copy p,
+.estate-heading p,
+.estate-about p,
+.estate-area p,
+.estate-contact p {
+  color: var(--estate-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.estate-hero h1 {
+  font-size: clamp(57px, 7vw, 108px);
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  margin: 25px 0;
+}
+.estate-hero-copy > span {
+  display: block;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 580px;
+}
+.estate-hero-copy > a,
+.estate-about a,
+.estate-contact > div > a {
+  align-items: center;
+  background: var(--estate-gold);
+  color: #17231f;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 12px;
+  margin-top: 35px;
+  padding: 18px 24px;
+  text-transform: uppercase;
+}
+.estate-hero-copy svg,
+.estate-about a svg,
+.estate-contact a svg {
+  height: 17px;
+}
+.estate-listings {
+  padding: 130px 6vw;
+}
+.estate-heading {
+  max-width: 720px;
+}
+.estate-heading h2,
+.estate-about h2,
+.estate-area h2,
+.estate-reviews h2,
+.estate-contact h2 {
+  font-size: clamp(43px, 5vw, 76px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 20px 0 28px;
+}
+.estate-heading > span,
+.estate-about > div > span,
+.estate-contact > div > span {
+  display: block;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.estate-cards {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 65px;
+}
+.estate-cards article {
+  background: white;
+}
+.estate-cards img {
+  height: 360px;
+}
+.estate-cards article > div {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 25px;
+}
+.estate-cards h3 {
+  font-size: 27px;
+  margin: 0 0 8px;
+}
+.estate-cards p {
+  grid-column: 1;
+  margin: 0;
+}
+.estate-about {
+  align-items: center;
+  background: var(--estate-dark);
+  color: white;
+  display: grid;
+  gap: 9vw;
+  grid-template-columns: 1fr 1fr;
+  padding: 130px 8vw;
+}
+.estate-about > img {
+  height: 620px;
+}
+.estate-area {
+  padding: 130px 5vw;
+}
+.estate-area > div:first-child {
+  text-align: center;
+}
+.estate-area > div:last-child {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  margin-top: 55px;
+}
+.estate-area img {
+  height: 460px;
+}
+.estate-reviews {
+  background: #ded7c9;
+  padding: 120px 8vw;
+  text-align: center;
+}
+.estate-reviews > div {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 45px auto 0;
+  max-width: 1050px;
+}
+.estate-reviews blockquote {
+  background: #f4f1ea;
+  margin: 0;
+  padding: 45px;
+}
+.estate-reviews blockquote span {
+  color: var(--estate-gold);
+}
+.estate-reviews svg {
+  fill: currentColor;
+  height: 14px;
+}
+.estate-reviews blockquote p {
+  font-family: Georgia, serif;
+  font-size: 24px;
+}
+.estate-reviews footer {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.estate-contact {
+  background: white;
+  display: grid;
+  gap: 9vw;
+  grid-template-columns: 1fr 1fr;
+  padding: 130px 8vw;
+}
+.estate-contact address {
+  border-top: 1px solid #bbb1a0;
+  font-style: normal;
+}
+.estate-contact address > a,
+.estate-contact address > div {
+  border-bottom: 1px solid #d4ccbf;
+  display: flex;
+  gap: 16px;
+  padding: 24px 0;
+}
+.estate-contact address svg {
+  height: 19px;
+}
+.estate-contact address span {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.estate-contact address small {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.estate-contact address strong {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.estate-site > footer {
+  align-items: center;
+  background: #12211e;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  padding: 45px 5vw;
+}
+.estate-site > footer strong {
+  font-family: Georgia, serif;
+  font-size: 23px;
+}
+.estate-site > footer p {
+  opacity: 0.65;
+}
+.estate-site > footer small {
+  justify-self: end;
+  opacity: 0.5;
+}
+@media (max-width: 980px) {
+  .estate-site > header {
+    grid-template-columns: 1fr auto;
+  }
+  .estate-site nav,
+  .estate-call {
+    display: none;
+  }
+  .estate-menu {
+    display: block;
+  }
+  .estate-about,
+  .estate-contact {
+    grid-template-columns: 1fr;
+  }
+  .estate-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  .estate-site > footer {
+    gap: 18px;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .estate-site > footer small {
+    justify-self: center;
+  }
+}
+@media (max-width: 640px) {
+  .estate-site > header {
+    min-height: 78px;
+    padding: 12px 20px;
+  }
+  .estate-hero {
+    height: 760px;
+  }
+  .estate-hero > img {
+    object-position: 68% center;
+  }
+  .estate-hero-copy {
+    left: 22px;
+    right: 22px;
+  }
+  .estate-hero h1 {
+    font-size: 56px;
+  }
+  .estate-listings,
+  .estate-about,
+  .estate-area,
+  .estate-reviews,
+  .estate-contact {
+    padding: 85px 22px;
+  }
+  .estate-cards {
+    grid-template-columns: 1fr;
+  }
+  .estate-cards img {
+    height: 330px;
+  }
+  .estate-about > img {
+    height: 470px;
+  }
+  .estate-area > div:last-child {
+    grid-template-columns: 1fr;
+  }
+  .estate-area img {
+    height: 360px;
+  }
+  .estate-reviews > div {
+    grid-template-columns: 1fr;
+  }
+}
