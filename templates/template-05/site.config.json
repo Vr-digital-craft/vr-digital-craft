@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "La boutique", "href": "#a-propos" },
+    { "label": "Nos produits", "href": "#produits" },
+    { "label": "Nouveautés", "href": "#nouveautes" },
+    { "label": "Infos pratiques", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Le Comptoir d'Iris",
+    "tagline": "Des objets choisis, des histoires à partager",
+    "activity": "Boutique indépendante",
+    "description": "Une boutique de quartier joyeuse qui réunit créations locales, objets pour la maison et petites attentions à offrir.",
+    "phone": "05 61 00 00 00",
+    "email": "bonjour@comptoir-iris.fr",
+    "address": "24 rue du Marché",
+    "city": "Toulouse",
+    "openingHours": ["Mardi – samedi : 10h – 19h", "Dimanche : 10h – 13h"]
+  },
+  "branding": {
+    "primaryColor": "#e33c2f",
+    "secondaryColor": "#173a59",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Votre boutique pleine de belles trouvailles.",
+      "subtitle": "Créations locales, objets singuliers et cadeaux choisis avec cœur, à découvrir au fil des saisons.",
+      "image": {
+        "src": "/templates/template-05/shop-hero.jpg",
+        "alt": "Boutique locale lumineuse et accueillante"
+      },
+      "primaryAction": { "label": "Découvrir la boutique", "href": "#produits" }
+    },
+    "services": {
+      "eyebrow": "Nos sélections",
+      "title": "Des produits qui ont quelque chose à raconter.",
+      "description": "Nous privilégions les petites séries, les savoir-faire locaux et les objets pensés pour durer.",
+      "items": [
+        {
+          "id": "maison",
+          "title": "Maison & décoration",
+          "description": "Céramiques, bougies et textiles pour donner du caractère à votre intérieur.",
+          "image": {
+            "src": "/templates/template-05/shop-products.jpg",
+            "alt": "Sélection colorée de créations artisanales"
+          }
+        },
+        {
+          "id": "cadeaux",
+          "title": "Cadeaux",
+          "description": "Des attentions originales pour tous les moments qui comptent."
+        },
+        {
+          "id": "local",
+          "title": "Créateurs locaux",
+          "description": "Une sélection renouvelée de pièces fabriquées près de chez nous."
+        },
+        {
+          "id": "saison",
+          "title": "Nouveautés de saison",
+          "description": "De nouvelles couleurs et collections à découvrir régulièrement."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "Notre histoire",
+      "title": "Un commerce de quartier, vivant et passionné.",
+      "description": "Iris imagine une boutique où l'on prend le temps de regarder, d'échanger et de trouver le bon objet. Chaque produit est choisi pour son histoire, sa qualité et le plaisir qu'il procure.",
+      "image": {
+        "src": "/templates/template-05/shop-owner.jpg",
+        "alt": "Commerçante préparant les rayons de sa boutique"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Les nouveautés en boutique",
+      "images": [
+        {
+          "src": "/templates/template-05/shop-products.jpg",
+          "alt": "Produits artisanaux présentés en boutique"
+        },
+        {
+          "src": "/templates/template-05/shop-owner.jpg",
+          "alt": "Accueil humain dans le commerce"
+        },
+        {
+          "src": "/templates/template-05/shop-hero.jpg",
+          "alt": "Intérieur lumineux de la boutique"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "Vos petits mots",
+      "items": [
+        {
+          "id": "avis-01",
+          "quote": "Toujours de jolies découvertes et des conseils vraiment attentionnés.",
+          "author": "Léa",
+          "role": "Cliente fidèle"
+        },
+        {
+          "id": "avis-02",
+          "quote": "Ma boutique préférée pour trouver un cadeau original et local.",
+          "author": "Nicolas",
+          "role": "Client"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Passez nous voir",
+      "title": "La porte est ouverte.",
+      "description": "Venez découvrir les nouveautés en boutique ou contactez-nous pour vérifier la disponibilité d'un produit.",
+      "phoneLabel": "Appeler la boutique",
+      "emailLabel": "Nous écrire",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Boutique indépendante et créations locales à Toulouse.",
+      "copyright": "© Le Comptoir d'Iris — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Le Comptoir d'Iris | Boutique locale à Toulouse",
+    "description": "Créations locales, décoration et idées cadeaux dans une boutique indépendante et chaleureuse à Toulouse.",
+    "socialImage": "/templates/template-05/shop-hero.jpg"
+  }
+}

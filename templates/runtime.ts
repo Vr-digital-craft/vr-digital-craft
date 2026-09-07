@@ -8,6 +8,8 @@ import garageConfig from "./template-03/site.config.json";
 import { GarageTemplate } from "./template-03/src/Template";
 import beautyConfig from "./template-04/site.config.json";
 import { BeautyTemplate } from "./template-04/src/Template";
+import commerceConfig from "./template-05/site.config.json";
+import { CommerceTemplate } from "./template-05/src/Template";
 
 export type RuntimeTemplate = {
   name: string;
@@ -35,5 +37,10 @@ export const runtimeTemplates: Record<string, RuntimeTemplate> = {
     name: "Beauté & bien-être",
     config: beautyConfig as SiteConfig,
     Component: BeautyTemplate,
+  },
+  "template-05": {
+    name: "Commerce local",
+    config: commerceConfig as SiteConfig,
+    Component: CommerceTemplate,
   },
 };

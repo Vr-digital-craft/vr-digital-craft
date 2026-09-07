@@ -49,4 +49,16 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-05",
+    name: "Commerce local",
+    designType: "Coloré, humain et contemporain",
+    description:
+      "Une vitrine vivante pour présenter les produits, les nouveautés et l'histoire d'un commerce de proximité.",
+    sectors: ["commerce"],
+    previewImage: "/templates/template-05/shop-hero.jpg",
+    demoConfig: "templates/template-05/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];
