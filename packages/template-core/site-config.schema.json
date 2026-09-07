@@ -4,9 +4,18 @@
   "title": "VR Digital SiteConfig",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "business", "branding", "content", "socialLinks", "seo"],
+  "required": [
+    "schemaVersion",
+    "navigation",
+    "business",
+    "branding",
+    "content",
+    "socialLinks",
+    "seo"
+  ],
   "properties": {
     "schemaVersion": { "const": 1 },
+    "navigation": { "type": "array", "items": { "$ref": "#/$defs/link" } },
     "business": {
       "type": "object",
       "additionalProperties": false,
@@ -47,7 +56,16 @@
     "content": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hero", "services", "about", "gallery", "testimonials", "faq"],
+      "required": [
+        "hero",
+        "services",
+        "about",
+        "gallery",
+        "testimonials",
+        "faq",
+        "contact",
+        "footer"
+      ],
       "properties": {
         "hero": {
           "type": "object",
@@ -60,21 +78,90 @@
             "primaryAction": { "$ref": "#/$defs/link" }
           }
         },
-        "services": { "type": "array", "items": { "$ref": "#/$defs/service" } },
+        "services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["eyebrow", "title", "description", "items"],
+          "properties": {
+            "eyebrow": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "items": { "type": "array", "items": { "$ref": "#/$defs/service" } }
+          }
+        },
         "about": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["enabled", "title", "description", "image"],
+          "required": ["enabled", "eyebrow", "title", "description", "image"],
           "properties": {
             "enabled": { "type": "boolean" },
+            "eyebrow": { "type": "string" },
             "title": { "type": "string" },
             "description": { "type": "string" },
             "image": { "anyOf": [{ "$ref": "#/$defs/image" }, { "type": "null" }] }
           }
         },
-        "gallery": { "type": "array", "items": { "$ref": "#/$defs/image" } },
-        "testimonials": { "type": "array", "items": { "$ref": "#/$defs/testimonial" } },
-        "faq": { "type": "array", "items": { "$ref": "#/$defs/faq" } }
+        "gallery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "title", "images"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "title": { "type": "string" },
+            "images": { "type": "array", "items": { "$ref": "#/$defs/image" } }
+          }
+        },
+        "testimonials": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "title", "items"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "title": { "type": "string" },
+            "items": { "type": "array", "items": { "$ref": "#/$defs/testimonial" } }
+          }
+        },
+        "faq": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "title", "items"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "title": { "type": "string" },
+            "items": { "type": "array", "items": { "$ref": "#/$defs/faq" } }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "eyebrow",
+            "title",
+            "description",
+            "phoneLabel",
+            "emailLabel",
+            "addressLabel",
+            "hoursLabel"
+          ],
+          "properties": {
+            "eyebrow": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "phoneLabel": { "type": "string" },
+            "emailLabel": { "type": "string" },
+            "addressLabel": { "type": "string" },
+            "hoursLabel": { "type": "string" }
+          }
+        },
+        "footer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tagline", "copyright"],
+          "properties": {
+            "tagline": { "type": "string" },
+            "copyright": { "type": "string" }
+          }
+        }
       }
     },
     "socialLinks": {

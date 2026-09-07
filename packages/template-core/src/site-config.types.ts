@@ -17,6 +17,7 @@ export type SiteService = {
 
 export type SiteConfig = {
   schemaVersion: 1;
+  navigation: SiteLink[];
   business: {
     name: string;
     tagline: string;
@@ -41,25 +42,43 @@ export type SiteConfig = {
       image: SiteImage | null;
       primaryAction: SiteLink;
     };
-    services: SiteService[];
+    services: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      items: SiteService[];
+    };
     about: {
       enabled: boolean;
+      eyebrow: string;
       title: string;
       description: string;
       image: SiteImage | null;
     };
-    gallery: SiteImage[];
+    gallery: { enabled: boolean; title: string; images: SiteImage[] };
     testimonials: {
-      id: string;
-      quote: string;
-      author: string;
-      role: string;
-    }[];
+      enabled: boolean;
+      title: string;
+      items: { id: string; quote: string; author: string; role: string }[];
+    };
     faq: {
-      id: string;
-      question: string;
-      answer: string;
-    }[];
+      enabled: boolean;
+      title: string;
+      items: { id: string; question: string; answer: string }[];
+    };
+    contact: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      phoneLabel: string;
+      emailLabel: string;
+      addressLabel: string;
+      hoursLabel: string;
+    };
+    footer: {
+      tagline: string;
+      copyright: string;
+    };
   };
   socialLinks: {
     facebook: string;

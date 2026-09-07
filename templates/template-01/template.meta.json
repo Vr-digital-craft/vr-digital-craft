@@ -1,0 +1,11 @@
+{
+  "id": "template-01",
+  "name": "Artisan moderne",
+  "designType": "Éditorial, chaleureux et structuré",
+  "description": "Une vitrine directe et rassurante pour valoriser le savoir-faire d'un artisan.",
+  "sectors": ["artisan", "services", "automobile"],
+  "previewImage": "/img/work-macon.jpg",
+  "demoConfig": "templates/template-01/site.config.json",
+  "version": 1,
+  "enabled": true
+}

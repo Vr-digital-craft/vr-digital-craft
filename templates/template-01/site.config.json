@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Services", "href": "#services" },
+    { "label": "À propos", "href": "#a-propos" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Atelier Martin",
+    "tagline": "Bâtir avec exigence, rénover avec passion.",
+    "activity": "Maçonnerie et rénovation",
+    "description": "Artisan maçon à Toulouse, Atelier Martin accompagne les particuliers dans leurs projets de construction, rénovation et aménagement extérieur.",
+    "phone": "06 12 34 56 78",
+    "email": "contact@atelier-martin.fr",
+    "address": "24 rue des Compagnons",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 8h – 18h", "Samedi : sur rendez-vous"]
+  },
+  "branding": {
+    "primaryColor": "#d95d25",
+    "secondaryColor": "#17324d",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Des ouvrages solides, pensés pour durer.",
+      "subtitle": "Construction, rénovation et aménagement réalisés avec soin à Toulouse et dans toute la région.",
+      "image": { "src": "/img/work-macon.jpg", "alt": "Artisan maçon travaillant sur un chantier" },
+      "primaryAction": { "label": "Demander un devis", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "Notre savoir-faire",
+      "title": "Un seul artisan pour vos projets essentiels.",
+      "description": "Des prestations claires, un chantier suivi et des finitions exigeantes.",
+      "items": [
+        {
+          "id": "construction",
+          "title": "Construction",
+          "description": "Murs, extensions, dalles et ouvrages maçonnés adaptés à votre projet."
+        },
+        {
+          "id": "renovation",
+          "title": "Rénovation",
+          "description": "Transformation, ouverture de murs et remise en état de bâtiments anciens."
+        },
+        {
+          "id": "exterieur",
+          "title": "Aménagement extérieur",
+          "description": "Terrasses, clôtures et espaces extérieurs durables et faciles à vivre."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "L'atelier",
+      "title": "Le geste juste, du premier échange à la réception.",
+      "description": "Chaque chantier est préparé avec précision. Vous gardez un interlocuteur unique, des explications simples et une vision claire de l'avancement.",
+      "image": { "src": "/img/before-old.jpg", "alt": "Détail d'un chantier de rénovation" }
+    },
+    "gallery": { "enabled": false, "title": "Nos réalisations", "images": [] },
+    "testimonials": { "enabled": false, "title": "Ils nous font confiance", "items": [] },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Votre projet",
+      "title": "Parlons de votre chantier.",
+      "description": "Décrivez-nous votre besoin. Nous vous répondons rapidement avec une première estimation.",
+      "phoneLabel": "Téléphone",
+      "emailLabel": "E-mail",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Maçonnerie et rénovation à Toulouse.",
+      "copyright": "© Atelier Martin — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Artisan maçon à Toulouse | Atelier Martin",
+    "description": "Atelier Martin réalise vos travaux de maçonnerie, rénovation et aménagement extérieur à Toulouse et dans ses environs.",
+    "socialImage": "/img/work-macon.jpg"
+  }
+}

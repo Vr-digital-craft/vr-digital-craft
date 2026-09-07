@@ -11,6 +11,7 @@ export function validateSiteConfig(value: unknown): ValidationResult {
   if (!isRecord(value)) return { success: false, errors: ["La configuration doit être un objet."] };
 
   if (value["schemaVersion"] !== 1) errors.push("schemaVersion doit être égal à 1.");
+  if (!Array.isArray(value["navigation"])) errors.push("navigation doit être une liste.");
   for (const section of ["business", "branding", "content", "socialLinks", "seo"] as const) {
     if (!isRecord(value[section])) errors.push(`${section} doit être un objet.`);
   }
@@ -43,10 +44,19 @@ export function validateSiteConfig(value: unknown): ValidationResult {
   const content = value["content"];
   if (isRecord(content)) {
     if (!isRecord(content["hero"])) errors.push("content.hero doit être un objet.");
-    if (!isRecord(content["about"])) errors.push("content.about doit être un objet.");
-    for (const field of ["services", "gallery", "testimonials", "faq"] as const) {
-      if (!Array.isArray(content[field])) errors.push(`content.${field} doit être une liste.`);
+    for (const field of [
+      "services",
+      "about",
+      "gallery",
+      "testimonials",
+      "faq",
+      "contact",
+      "footer",
+    ] as const) {
+      if (!isRecord(content[field])) errors.push(`content.${field} doit être un objet.`);
     }
+    if (isRecord(content["services"]) && !Array.isArray(content["services"]["items"]))
+      errors.push("content.services.items doit être une liste.");
   }
 
   const seo = value["seo"];
