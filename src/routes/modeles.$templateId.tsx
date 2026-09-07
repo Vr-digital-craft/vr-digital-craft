@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ArrowLeft, LockKeyhole } from "lucide-react";
+import { ArrowLeft, LayoutTemplate } from "lucide-react";
 import type { SiteConfig } from "../../packages/template-core/src";
 import artisanConfig from "../../templates/template-01/site.config.json";
 import { ArtisanTemplate } from "../../templates/template-01/src/Template";
@@ -43,15 +43,13 @@ function TemplateDemoPage() {
           <ArrowLeft className="size-4" />
           Retour aux modèles
         </a>
-        <button
-          type="button"
-          disabled
-          title="Disponible à l'étape suivante"
-          className="label-mono flex cursor-not-allowed items-center gap-2 rounded-md bg-neon px-4 py-3 text-[0.65rem] text-primary-foreground opacity-60"
+        <a
+          href={`/creer-mon-site?template=${templateId}`}
+          className="label-mono flex items-center gap-2 rounded-md bg-neon px-4 py-3 text-[0.65rem] text-primary-foreground"
         >
-          <LockKeyhole className="size-4" />
+          <LayoutTemplate className="size-4" />
           Choisir ce modèle
-        </button>
+        </a>
       </div>
       <Template config={template.config} />
     </div>

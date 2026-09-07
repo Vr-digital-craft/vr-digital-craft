@@ -125,15 +125,13 @@ function ModelsPage() {
                           <Eye className="size-4" />
                           Voir la démo
                         </a>
-                        <button
-                          type="button"
-                          disabled
-                          title="Disponible à l'étape suivante"
-                          className="label-mono flex cursor-not-allowed items-center justify-center gap-2 rounded-md bg-neon px-4 py-4 text-[0.65rem] text-primary-foreground opacity-60"
+                        <a
+                          href={`/creer-mon-site?template=${model.id}`}
+                          className="label-mono flex items-center justify-center gap-2 rounded-md bg-neon px-4 py-4 text-[0.65rem] text-primary-foreground transition-shadow hover:shadow-[var(--shadow-neon-strong)]"
                         >
                           <LayoutTemplate className="size-4" />
                           Choisir ce modèle
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </article>

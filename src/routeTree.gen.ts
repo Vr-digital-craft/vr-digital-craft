@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CreerMonSiteRouteImport } from './routes/creer-mon-site'
 import { Route as ModelesRouteImport } from './routes/modeles'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -18,6 +19,11 @@ import { Route as ModelesTemplateIdRouteImport } from './routes/modeles.$templat
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreerMonSiteRoute = CreerMonSiteRouteImport.update({
+  id: '/creer-mon-site',
+  path: '/creer-mon-site',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModelesRoute = ModelesRouteImport.update({
@@ -43,6 +49,7 @@ const ModelesTemplateIdRoute = ModelesTemplateIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
@@ -66,12 +75,24 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/modeles' | '/realisations' | '/services' | '/modeles/$templateId'
+    | '/'
+    | '/creer-mon-site'
+    | '/modeles'
+    | '/realisations'
+    | '/services'
+    | '/modeles/$templateId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/modeles' | '/realisations' | '/services' | '/modeles/$templateId'
+  to:
+    | '/'
+    | '/creer-mon-site'
+    | '/modeles'
+    | '/realisations'
+    | '/services'
+    | '/modeles/$templateId'
   id:
     | '__root__'
     | '/'
+    | '/creer-mon-site'
     | '/modeles'
     | '/realisations'
     | '/services'
@@ -80,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CreerMonSiteRoute: typeof CreerMonSiteRoute
   ModelesRoute: typeof ModelesRouteWithChildren
   RealisationsRoute: typeof RealisationsRoute
   ServicesRoute: typeof ServicesRoute
@@ -92,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creer-mon-site': {
+      id: '/creer-mon-site'
+      path: '/creer-mon-site'
+      fullPath: '/creer-mon-site'
+      preLoaderRoute: typeof CreerMonSiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modeles': {
@@ -138,6 +167,7 @@ const ModelesRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CreerMonSiteRoute: CreerMonSiteRoute,
   ModelesRoute: ModelesRouteWithChildren,
   RealisationsRoute: RealisationsRoute,
   ServicesRoute: ServicesRoute,
