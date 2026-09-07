@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Download,
-  LoaderCircle,
-  LockKeyhole,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle2, Download, LoaderCircle, LockKeyhole } from "lucide-react";
 import type { SiteConfig } from "../../packages/template-core/src";
 import { ArtisanTemplate } from "../../templates/template-01/src/Template";
 import { applyLocalAssets, type GeneratedProject } from "@/modules/projects/generated-project";
 import { getLocalProject } from "@/modules/projects/browser-project-store";
-import { saveLocalProject } from "@/modules/projects/browser-project-store";
-import { generateSiteCopy } from "@/modules/ai/generate-site-copy.functions";
-import { applyGeneratedCopy } from "@/modules/ai/site-copy";
 
 export const Route = createFileRoute("/apercu/$projectId")({
   head: () => ({
@@ -31,8 +21,6 @@ function ProjectPreviewPage() {
   const [project, setProject] = useState<GeneratedProject | null>(null);
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [error, setError] = useState("");
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiMessage, setAiMessage] = useState("");
 
   useEffect(() => {
     let dispose = () => {};
@@ -66,32 +54,6 @@ function ProjectPreviewPage() {
     URL.revokeObjectURL(url);
   }
 
-  async function improveWithAi() {
-    if (!project) return;
-    setAiLoading(true);
-    setAiMessage("");
-    try {
-      const stored = await getLocalProject(project.id);
-      if (!stored) throw new Error("Projet introuvable");
-      const copy = await generateSiteCopy({ data: { config: project.config } });
-      const updatedProject: GeneratedProject = {
-        ...project,
-        status: "a_controler",
-        updatedAt: new Date().toISOString(),
-        config: applyGeneratedCopy(project.config, copy),
-      };
-      await saveLocalProject(updatedProject, stored.assets);
-      const materialized = applyLocalAssets(updatedProject, stored.assets);
-      setProject(updatedProject);
-      setConfig(materialized.config);
-      setAiMessage("Textes générés — vérifiez-les avant toute publication.");
-    } catch (cause) {
-      setAiMessage(cause instanceof Error ? cause.message : "La génération IA a échoué.");
-    } finally {
-      setAiLoading(false);
-    }
-  }
-
   if (error) return <PreviewMessage title="Prévisualisation indisponible" description={error} />;
   if (!project || !config)
     return (
@@ -118,19 +80,6 @@ function ProjectPreviewPage() {
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={improveWithAi}
-            disabled={aiLoading}
-            className="label-mono flex items-center gap-2 rounded-md border border-neon/50 px-3 py-3 text-[0.6rem] hover:border-neon disabled:opacity-60"
-          >
-            {aiLoading ? (
-              <LoaderCircle className="size-4 animate-spin" />
-            ) : (
-              <Sparkles className="size-4 text-neon" />
-            )}
-            {aiLoading ? "Génération..." : "Améliorer avec l’IA"}
-          </button>
-          <button
-            type="button"
             onClick={downloadConfig}
             className="label-mono flex items-center gap-2 rounded-md border border-white/20 px-3 py-3 text-[0.6rem] hover:border-neon"
           >
@@ -148,14 +97,6 @@ function ProjectPreviewPage() {
           </button>
         </div>
       </div>
-      {aiMessage && (
-        <div
-          role="status"
-          className="fixed right-4 bottom-24 z-[101] max-w-sm rounded-lg border border-white/15 bg-black/90 px-4 py-3 text-sm text-white shadow-xl"
-        >
-          {aiMessage}
-        </div>
-      )}
       <ArtisanTemplate config={config} />
     </div>
   );

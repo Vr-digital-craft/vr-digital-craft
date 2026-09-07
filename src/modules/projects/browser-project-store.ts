@@ -51,3 +51,28 @@ export async function getLocalProject(projectId: string) {
   database.close();
   return project ? { project, assets: storedAssets ?? { logo: null, photos: [] } } : null;
 }
+
+export async function getAllLocalProjects(): Promise<GeneratedProject[]> {
+  const database = await openDatabase();
+  const transaction = database.transaction("projects", "readonly");
+  const projects = await requestResult<GeneratedProject[]>(
+    transaction.objectStore("projects").getAll(),
+  );
+  database.close();
+  return projects.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function updateLocalProject(project: GeneratedProject) {
+  const database = await openDatabase();
+  const transaction = database.transaction("projects", "readwrite");
+  transaction.objectStore("projects").put({
+    ...project,
+    updatedAt: new Date().toISOString(),
+  });
+  await new Promise<void>((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () =>
+      reject(transaction.error ?? new Error("La mise à jour locale a échoué."));
+  });
+  database.close();
+}

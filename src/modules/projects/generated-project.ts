@@ -18,6 +18,7 @@ export type GeneratedProject = {
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;
+  archived: boolean;
   config: SiteConfig;
 };
 
@@ -93,6 +94,7 @@ export function generateProject(
     status: "a_controler",
     createdAt: now,
     updatedAt: now,
+    archived: false,
     config,
   };
 }

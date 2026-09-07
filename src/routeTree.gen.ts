@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CreerMonSiteRouteImport } from './routes/creer-mon-site'
 import { Route as ModelesRouteImport } from './routes/modeles'
 import { Route as RealisationsRouteImport } from './routes/realisations'
@@ -20,6 +21,11 @@ import { Route as ModelesTemplateIdRouteImport } from './routes/modeles.$templat
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreerMonSiteRoute = CreerMonSiteRouteImport.update({
@@ -55,6 +61,7 @@ const ModelesTemplateIdRoute = ModelesTemplateIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/creer-mon-site': typeof CreerMonSiteRoute
   '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/creer-mon-site'
     | '/modeles'
     | '/realisations'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/creer-mon-site'
     | '/modeles'
     | '/realisations'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/creer-mon-site'
     | '/modeles'
     | '/realisations'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CreerMonSiteRoute: typeof CreerMonSiteRoute
   ModelesRoute: typeof ModelesRouteWithChildren
   RealisationsRoute: typeof RealisationsRoute
@@ -127,6 +140,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/creer-mon-site': {
@@ -187,6 +207,7 @@ const ModelesRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CreerMonSiteRoute: CreerMonSiteRoute,
   ModelesRoute: ModelesRouteWithChildren,
   RealisationsRoute: RealisationsRoute,
