@@ -10,12 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ModelesRouteImport } from './routes/modeles'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ModelesTemplateIdRouteImport } from './routes/modeles.$templateId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelesRoute = ModelesRouteImport.update({
+  id: '/modeles',
+  path: '/modeles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RealisationsRoute = RealisationsRouteImport.update({
@@ -28,33 +35,52 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModelesTemplateIdRoute = ModelesTemplateIdRouteImport.update({
+  id: '/$templateId',
+  path: '/$templateId',
+  getParentRoute: () => ModelesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/modeles': typeof ModelesRouteWithChildren
   '/realisations': typeof RealisationsRoute
   '/services': typeof ServicesRoute
+  '/modeles/$templateId': typeof ModelesTemplateIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/realisations' | '/services'
+  fullPaths:
+    '/' | '/modeles' | '/realisations' | '/services' | '/modeles/$templateId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/realisations' | '/services'
-  id: '__root__' | '/' | '/realisations' | '/services'
+  to: '/' | '/modeles' | '/realisations' | '/services' | '/modeles/$templateId'
+  id:
+    | '__root__'
+    | '/'
+    | '/modeles'
+    | '/realisations'
+    | '/services'
+    | '/modeles/$templateId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ModelesRoute: typeof ModelesRouteWithChildren
   RealisationsRoute: typeof RealisationsRoute
   ServicesRoute: typeof ServicesRoute
 }
@@ -66,6 +92,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modeles': {
+      id: '/modeles'
+      path: '/modeles'
+      fullPath: '/modeles'
+      preLoaderRoute: typeof ModelesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/realisations': {
@@ -82,11 +115,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modeles/$templateId': {
+      id: '/modeles/$templateId'
+      path: '/$templateId'
+      fullPath: '/modeles/$templateId'
+      preLoaderRoute: typeof ModelesTemplateIdRouteImport
+      parentRoute: typeof ModelesRoute
+    }
   }
 }
 
+interface ModelesRouteChildren {
+  ModelesTemplateIdRoute: typeof ModelesTemplateIdRoute
+}
+
+const ModelesRouteChildren: ModelesRouteChildren = {
+  ModelesTemplateIdRoute: ModelesTemplateIdRoute,
+}
+
+const ModelesRouteWithChildren =
+  ModelesRoute._addFileChildren(ModelesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ModelesRoute: ModelesRouteWithChildren,
   RealisationsRoute: RealisationsRoute,
   ServicesRoute: ServicesRoute,
 }

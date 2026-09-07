@@ -3,6 +3,7 @@ import { useSiteContent, useText } from "./content";
 
 const allQuickLinks = [
   { label: "Accueil", href: "/", section: "hero" },
+  { label: "Modèles", href: "/modeles", section: "models" },
   { label: "Réalisations", href: "/realisations", section: "work" },
   { label: "Services", href: "/services", section: "services" },
   { label: "Tarifs", href: "/#tarifs", section: "pricing" },
