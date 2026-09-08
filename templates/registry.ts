@@ -85,4 +85,15 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-08",
+    name: "Premium dark",
+    designType: "Sombre, minimaliste et spectaculaire",
+    description: "Une vitrine immersive pour les activités et réalisations haut de gamme.",
+    sectors: ["services"],
+    previewImage: "/templates/template-08/premium-hero.jpg",
+    demoConfig: "templates/template-08/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];

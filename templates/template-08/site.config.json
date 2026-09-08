@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Expertise", "href": "#services" },
+    { "label": "Maison", "href": "#a-propos" },
+    { "label": "Projets", "href": "#realisations" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Studio Orbe",
+    "tagline": "L'exception dans chaque détail",
+    "activity": "Architecture intérieure",
+    "description": "Un studio créatif dédié aux espaces singuliers et aux projets haut de gamme.",
+    "phone": "05 61 00 00 00",
+    "email": "contact@studio-orbe.fr",
+    "address": "7 rue Ozenne",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 9h – 18h"]
+  },
+  "branding": {
+    "primaryColor": "#c7a66a",
+    "secondaryColor": "#080909",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Créer des espaces qui marquent.",
+      "subtitle": "Architecture intérieure, direction artistique et réalisation sur mesure pour des lieux d'exception.",
+      "image": {
+        "src": "/templates/template-08/premium-hero.jpg",
+        "alt": "Intérieur spectaculaire en pierre sombre et laiton"
+      },
+      "primaryAction": { "label": "Découvrir le studio", "href": "#a-propos" }
+    },
+    "services": {
+      "eyebrow": "Expertise",
+      "title": "De l'intuition à la réalisation.",
+      "description": "Une vision globale, portée avec exigence à chaque étape.",
+      "items": [
+        { "id": "concept", "title": "Concept", "description": "Identité, volumes et matières." },
+        {
+          "id": "design",
+          "title": "Design intérieur",
+          "description": "Espaces, mobilier et lumière."
+        },
+        { "id": "suivi", "title": "Réalisation", "description": "Coordination et suivi exigeant." }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "Le studio",
+      "title": "Une esthétique précise, jamais ostentatoire.",
+      "description": "Nous composons des lieux durables où architecture, matière et lumière dialoguent avec évidence.",
+      "image": {
+        "src": "/templates/template-08/premium-hero.jpg",
+        "alt": "Détail architectural haut de gamme"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Projets sélectionnés",
+      "images": [
+        { "src": "/templates/template-08/premium-hero.jpg", "alt": "Projet intérieur sculptural" }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "Regards clients",
+      "items": [
+        {
+          "id": "a1",
+          "quote": "Une vision remarquable et une attention rare portée à chaque détail.",
+          "author": "Client privé",
+          "role": "Résidence"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Un projet",
+      "title": "Imaginons un lieu unique.",
+      "description": "Présentez-nous votre ambition pour organiser un premier échange confidentiel.",
+      "phoneLabel": "Appeler le studio",
+      "emailLabel": "Écrire au studio",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Architecture intérieure haut de gamme.",
+      "copyright": "© Studio Orbe — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Studio Orbe | Architecture intérieure",
+    "description": "Studio d'architecture intérieure et projets haut de gamme à Toulouse.",
+    "socialImage": "/templates/template-08/premium-hero.jpg"
+  }
+}

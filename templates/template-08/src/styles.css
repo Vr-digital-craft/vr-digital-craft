@@ -1,0 +1,135 @@
+.dark {
+  background: var(--black);
+  color: #eee;
+  font-family: "DM Sans", sans-serif;
+}
+.dark * {
+  box-sizing: border-box;
+}
+.dark a {
+  color: inherit;
+  text-decoration: none;
+}
+.dark header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 28px 5vw;
+}
+.dark nav {
+  display: flex;
+  gap: 32px;
+}
+.dark-hero {
+  height: 850px;
+  position: relative;
+}
+.dark-hero > img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+.dark-hero:after {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85), transparent);
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+.dark-hero > div {
+  left: 7vw;
+  max-width: 650px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.dark p {
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.dark h1,
+.dark h2,
+.dark h3 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+.dark h1 {
+  font-size: clamp(60px, 8vw, 120px);
+  line-height: 0.9;
+  margin: 25px 0;
+}
+.dark-hero span {
+  font-size: 18px;
+  line-height: 1.7;
+}
+.dark a {
+  align-items: center;
+  display: inline-flex;
+  gap: 12px;
+}
+.dark-hero a,
+.dark-contact a {
+  border: 1px solid var(--gold);
+  margin-top: 35px;
+  padding: 18px 24px;
+}
+.dark-services {
+  padding: 130px 7vw;
+}
+.dark h2 {
+  font-size: clamp(45px, 6vw, 82px);
+}
+.dark-services > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.dark-services article {
+  border-top: 1px solid #555;
+  padding: 35px;
+}
+.dark-services small {
+  color: var(--gold);
+}
+.dark-services h3 {
+  font-size: 32px;
+}
+.dark-about {
+  background: #141515;
+  padding: 150px 18vw;
+}
+.dark-about span {
+  font-size: 22px;
+  line-height: 1.7;
+}
+.dark-contact {
+  padding: 140px 12vw;
+}
+.dark footer {
+  border-top: 1px solid #333;
+  padding: 40px;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .dark nav {
+    display: none;
+  }
+  .dark-hero {
+    height: 760px;
+  }
+  .dark-hero > div {
+    left: 22px;
+    right: 22px;
+  }
+  .dark h1 {
+    font-size: 60px;
+  }
+  .dark-services,
+  .dark-about,
+  .dark-contact {
+    padding: 90px 22px;
+  }
+  .dark-services > div {
+    grid-template-columns: 1fr;
+  }
+}
