@@ -73,4 +73,16 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-07",
+    name: "Entreprise corporate",
+    designType: "Structuré, sobre et contemporain",
+    description:
+      "Une vitrine crédible pour présenter expertises, chiffres clés, équipe et réalisations.",
+    sectors: ["services"],
+    previewImage: "/templates/template-07/corporate-hero.jpg",
+    demoConfig: "templates/template-07/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];

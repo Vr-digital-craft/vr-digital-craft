@@ -12,6 +12,8 @@ import commerceConfig from "./template-05/site.config.json";
 import { CommerceTemplate } from "./template-05/src/Template";
 import realEstateConfig from "./template-06/site.config.json";
 import { RealEstateTemplate } from "./template-06/src/Template";
+import corporateConfig from "./template-07/site.config.json";
+import { CorporateTemplate } from "./template-07/src/Template";
 
 export type RuntimeTemplate = {
   name: string;
@@ -49,5 +51,10 @@ export const runtimeTemplates: Record<string, RuntimeTemplate> = {
     name: "Immobilier premium",
     config: realEstateConfig as SiteConfig,
     Component: RealEstateTemplate,
+  },
+  "template-07": {
+    name: "Entreprise corporate",
+    config: corporateConfig as SiteConfig,
+    Component: CorporateTemplate,
   },
 };

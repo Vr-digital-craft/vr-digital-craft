@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Expertises", "href": "#services" },
+    { "label": "Entreprise", "href": "#a-propos" },
+    { "label": "Réalisations", "href": "#realisations" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Nexa Conseil",
+    "tagline": "Transformer les ambitions en résultats",
+    "activity": "Conseil & transformation",
+    "description": "Une équipe pluridisciplinaire accompagne les organisations dans leurs projets stratégiques et opérationnels.",
+    "phone": "05 61 00 00 00",
+    "email": "contact@nexa-conseil.fr",
+    "address": "20 allée Jean-Jaurès",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 9h – 18h"]
+  },
+  "branding": {
+    "primaryColor": "#1769e0",
+    "secondaryColor": "#0b1f3a",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Donner de l'élan à vos transformations.",
+      "subtitle": "Stratégie, organisation et performance : nos experts transforment vos enjeux complexes en trajectoires concrètes.",
+      "image": {
+        "src": "/templates/template-07/corporate-hero.jpg",
+        "alt": "Équipe professionnelle travaillant ensemble"
+      },
+      "primaryAction": { "label": "Parler de votre projet", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "Nos expertises",
+      "title": "Des expertises complémentaires, un même cap.",
+      "description": "Nous réunissons conseil stratégique, transformation et pilotage pour produire des résultats durables.",
+      "items": [
+        {
+          "id": "strategie",
+          "title": "Stratégie",
+          "description": "Clarifier les priorités et construire une feuille de route mobilisatrice."
+        },
+        {
+          "id": "transformation",
+          "title": "Transformation",
+          "description": "Faire évoluer les organisations, les méthodes et les outils."
+        },
+        {
+          "id": "performance",
+          "title": "Performance",
+          "description": "Piloter les résultats avec des indicateurs utiles et partagés."
+        },
+        {
+          "id": "projets",
+          "title": "Projets complexes",
+          "description": "Sécuriser l'exécution de programmes à forts enjeux."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "À propos",
+      "title": "L'exigence du conseil, la proximité en plus.",
+      "description": "Nos consultants travaillent aux côtés de vos équipes, avec une approche pragmatique, des décisions documentées et un transfert réel de compétences.",
+      "image": {
+        "src": "/templates/template-07/corporate-expertise.jpg",
+        "alt": "Équipe projet analysant des plans"
+      }
+    },
+    "gallery": {
+      "enabled": true,
+      "title": "Des transformations concrètes",
+      "images": [
+        {
+          "src": "/templates/template-07/corporate-expertise.jpg",
+          "alt": "Atelier de travail collaboratif"
+        },
+        {
+          "src": "/templates/template-07/corporate-hero.jpg",
+          "alt": "Équipe de consultants en réunion"
+        }
+      ]
+    },
+    "testimonials": {
+      "enabled": true,
+      "title": "La confiance de nos clients",
+      "items": [
+        {
+          "id": "a1",
+          "quote": "Une équipe engagée qui a su rendre notre transformation concrète et mesurable.",
+          "author": "Direction générale",
+          "role": "Entreprise cliente"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "Votre projet",
+      "title": "Construisons la prochaine étape.",
+      "description": "Échangeons sur vos objectifs, vos contraintes et les résultats que vous souhaitez atteindre.",
+      "phoneLabel": "Nous appeler",
+      "emailLabel": "Écrire à l'équipe",
+      "addressLabel": "Bureau",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Conseil et transformation à Toulouse.",
+      "copyright": "© Nexa Conseil — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Nexa Conseil | Conseil et transformation",
+    "description": "Conseil stratégique, transformation et performance des organisations à Toulouse.",
+    "socialImage": "/templates/template-07/corporate-hero.jpg"
+  }
+}
