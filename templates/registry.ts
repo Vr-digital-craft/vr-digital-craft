@@ -96,4 +96,28 @@ export const templateRegistry: TemplateMetadata[] = [
     version: 1,
     enabled: true,
   },
+  {
+    id: "template-09",
+    name: "Profession libérale",
+    designType: "Clair, crédible et rassurant",
+    description:
+      "Une vitrine structurée pour présenter une expertise, une méthode et répondre aux questions essentielles.",
+    sectors: ["profession-liberale"],
+    previewImage: "/templates/template-09/professional-hero.jpg",
+    demoConfig: "templates/template-09/site.config.json",
+    version: 1,
+    enabled: true,
+  },
+  {
+    id: "template-10",
+    name: "One Page moderne",
+    designType: "Compact, audacieux et direct",
+    description:
+      "Une page unique dynamique pour présenter rapidement une petite entreprise et convertir les visiteurs.",
+    sectors: ["services", "commerce", "artisan"],
+    previewImage: "/img/work-artisan.jpg",
+    demoConfig: "templates/template-10/site.config.json",
+    version: 1,
+    enabled: true,
+  },
 ];

@@ -1,0 +1,162 @@
+.one {
+  background: #f5f0e8;
+  color: var(--one-dark);
+  font-family: "Space Grotesk", sans-serif;
+}
+.one * {
+  box-sizing: border-box;
+}
+.one a {
+  color: inherit;
+  text-decoration: none;
+}
+.one header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 28px 6vw;
+}
+.one header strong {
+  font-size: 25px;
+}
+.one header a {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+}
+.one header svg {
+  height: 18px;
+}
+.one-hero {
+  background: var(--one-pop);
+  min-height: 760px;
+  padding: 120px 7vw;
+}
+.one p {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.one h1 {
+  font-size: clamp(72px, 12vw, 180px);
+  letter-spacing: -0.075em;
+  line-height: 0.78;
+  margin: 40px 0;
+  max-width: 1200px;
+}
+.one-hero > span {
+  font-size: 24px;
+}
+.one-hero > a {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-top: 70px;
+}
+.one h2 {
+  font-size: clamp(48px, 7vw, 95px);
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+.one-services {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, 1fr);
+  padding: 120px 6vw;
+}
+.one-services article {
+  border-left: 1px solid #b9b1a6;
+  padding: 25px;
+}
+.one-services small {
+  color: var(--one-pop);
+}
+.one-services h3 {
+  font-size: 30px;
+}
+.one-services span,
+.one-about > span {
+  line-height: 1.7;
+}
+.one-about {
+  background: var(--one-dark);
+  color: white;
+  padding: 140px 18vw;
+}
+.one-about p {
+  color: var(--one-pop);
+}
+.one-about > span {
+  font-size: 22px;
+}
+.one-review {
+  padding: 120px 10vw;
+}
+.one-review blockquote {
+  color: var(--one-pop);
+  font-size: clamp(35px, 5vw, 70px);
+  font-weight: 700;
+  margin: 55px 0;
+}
+.one-review footer {
+  color: var(--one-dark);
+  font-size: 15px;
+  margin-top: 25px;
+}
+.one-contact {
+  background: var(--one-pop);
+  padding: 120px 8vw;
+}
+.one-contact a {
+  align-items: center;
+  border: 2px solid var(--one-dark);
+  display: inline-flex;
+  gap: 12px;
+  padding: 18px 24px;
+}
+.one-contact > strong {
+  display: block;
+  font-size: 24px;
+  margin-top: 30px;
+}
+.one > footer {
+  background: var(--one-dark);
+  color: white;
+  padding: 38px;
+  text-align: center;
+}
+@media (max-width: 850px) {
+  .one h1 {
+    font-size: 80px;
+  }
+  .one-services {
+    grid-template-columns: 1fr;
+  }
+  .one-services article {
+    border-left: 0;
+    border-top: 1px solid #b9b1a6;
+  }
+  .one-about {
+    padding: 100px 24px;
+  }
+}
+@media (max-width: 520px) {
+  .one header a {
+    font-size: 0;
+  }
+  .one-hero {
+    min-height: 650px;
+    padding: 100px 22px;
+  }
+  .one h1 {
+    font-size: 65px;
+  }
+  .one-hero > span {
+    font-size: 19px;
+  }
+  .one-services,
+  .one-review,
+  .one-contact {
+    padding: 85px 22px;
+  }
+}

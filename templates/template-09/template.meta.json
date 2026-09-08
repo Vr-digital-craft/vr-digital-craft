@@ -1,0 +1,11 @@
+{
+  "id": "template-09",
+  "name": "Profession libérale",
+  "designType": "Clair, crédible et rassurant",
+  "description": "Une vitrine structurée pour présenter une expertise, une méthode et répondre aux questions essentielles.",
+  "sectors": ["profession-liberale"],
+  "previewImage": "/templates/template-09/professional-hero.jpg",
+  "demoConfig": "templates/template-09/site.config.json",
+  "version": 1,
+  "enabled": true
+}

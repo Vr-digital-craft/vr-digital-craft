@@ -1,0 +1,11 @@
+{
+  "id": "template-10",
+  "name": "One Page moderne",
+  "designType": "Compact, audacieux et direct",
+  "description": "Une page unique dynamique pour présenter rapidement une petite entreprise et convertir les visiteurs.",
+  "sectors": ["services", "commerce", "artisan"],
+  "previewImage": "/img/work-artisan.jpg",
+  "demoConfig": "templates/template-10/site.config.json",
+  "version": 1,
+  "enabled": true
+}

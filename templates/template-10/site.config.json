@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Services", "href": "#services" },
+    { "label": "À propos", "href": "#a-propos" },
+    { "label": "Avis", "href": "#avis" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Atelier Nova",
+    "tagline": "Simplement efficace",
+    "activity": "Services aux professionnels",
+    "description": "Une petite équipe réactive qui transforme vos besoins en solutions concrètes.",
+    "phone": "05 61 00 00 00",
+    "email": "bonjour@atelier-nova.fr",
+    "address": "4 rue des Filatiers",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 9h – 18h"]
+  },
+  "branding": {
+    "primaryColor": "#ff5b36",
+    "secondaryColor": "#18152d",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Votre projet. Notre énergie.",
+      "subtitle": "Un partenaire local, une méthode simple et des résultats visibles.",
+      "image": null,
+      "primaryAction": { "label": "Démarrer un projet", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "Ce que nous faisons",
+      "title": "Trois expertises, un seul interlocuteur.",
+      "description": "Des prestations simples à comprendre et faciles à adapter.",
+      "items": [
+        {
+          "id": "conseil",
+          "title": "Conseil",
+          "description": "Cadrer le besoin et choisir la bonne direction."
+        },
+        {
+          "id": "creation",
+          "title": "Création",
+          "description": "Transformer l'idée en solution claire et attractive."
+        },
+        {
+          "id": "suivi",
+          "title": "Suivi",
+          "description": "Mesurer, ajuster et rester disponible dans la durée."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "À propos",
+      "title": "Petit par la taille. Grand par l'engagement.",
+      "description": "Nous travaillons en circuit court, avec des échanges directs et une vraie attention portée à chaque détail.",
+      "image": null
+    },
+    "gallery": { "enabled": false, "title": "Réalisations", "images": [] },
+    "testimonials": {
+      "enabled": true,
+      "title": "Ce sont nos clients qui en parlent le mieux",
+      "items": [
+        {
+          "id": "a1",
+          "quote": "Rapide, clair et efficace. Exactement ce dont nous avions besoin.",
+          "author": "Camille Martin",
+          "role": "Dirigeante"
+        }
+      ]
+    },
+    "faq": { "enabled": false, "title": "Questions fréquentes", "items": [] },
+    "contact": {
+      "eyebrow": "On commence ?",
+      "title": "Parlons de votre idée.",
+      "description": "Un message suffit pour organiser un premier échange.",
+      "phoneLabel": "Appeler",
+      "emailLabel": "Envoyer un message",
+      "addressLabel": "Adresse",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Des solutions simples pour les entreprises locales.",
+      "copyright": "© Atelier Nova — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Atelier Nova | Services aux professionnels",
+    "description": "Conseil, création et accompagnement pour les professionnels à Toulouse.",
+    "socialImage": ""
+  }
+}

@@ -16,6 +16,10 @@ import corporateConfig from "./template-07/site.config.json";
 import { CorporateTemplate } from "./template-07/src/Template";
 import premiumConfig from "./template-08/site.config.json";
 import { PremiumDarkTemplate } from "./template-08/src/Template";
+import professionalConfig from "./template-09/site.config.json";
+import { ProfessionalTemplate } from "./template-09/src/Template";
+import onePageConfig from "./template-10/site.config.json";
+import { OnePageTemplate } from "./template-10/src/Template";
 
 export type RuntimeTemplate = {
   name: string;
@@ -63,5 +67,15 @@ export const runtimeTemplates: Record<string, RuntimeTemplate> = {
     name: "Premium dark",
     config: premiumConfig as SiteConfig,
     Component: PremiumDarkTemplate,
+  },
+  "template-09": {
+    name: "Profession libérale",
+    config: professionalConfig as SiteConfig,
+    Component: ProfessionalTemplate,
+  },
+  "template-10": {
+    name: "One Page moderne",
+    config: onePageConfig as SiteConfig,
+    Component: OnePageTemplate,
   },
 };

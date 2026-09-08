@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "navigation": [
+    { "label": "Accueil", "href": "#accueil" },
+    { "label": "Expertise", "href": "#services" },
+    { "label": "Méthode", "href": "#methode" },
+    { "label": "FAQ", "href": "#faq" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "business": {
+    "name": "Cabinet Claire Rivière",
+    "tagline": "Comprendre, structurer, avancer",
+    "activity": "Architecte & consultante",
+    "description": "Un accompagnement indépendant pour concevoir des projets cohérents, réalistes et durables.",
+    "phone": "05 61 00 00 00",
+    "email": "contact@claire-riviere.fr",
+    "address": "11 rue de Metz",
+    "city": "Toulouse",
+    "openingHours": ["Lundi – vendredi : 9h – 18h"]
+  },
+  "branding": {
+    "primaryColor": "#176f6a",
+    "secondaryColor": "#173338",
+    "logo": null,
+    "favicon": "/favicon.ico"
+  },
+  "content": {
+    "hero": {
+      "title": "Une expertise claire pour des décisions sereines.",
+      "subtitle": "Je vous accompagne avec méthode, écoute et indépendance, de la réflexion initiale jusqu'à la mise en œuvre.",
+      "image": {
+        "src": "/templates/template-09/professional-hero.jpg",
+        "alt": "Consultante travaillant dans son cabinet"
+      },
+      "primaryAction": { "label": "Prendre rendez-vous", "href": "#contact" }
+    },
+    "services": {
+      "eyebrow": "Domaines d'expertise",
+      "title": "Un accompagnement adapté à votre situation.",
+      "description": "Des missions cadrées, des recommandations compréhensibles et un suivi attentif.",
+      "items": [
+        {
+          "id": "audit",
+          "title": "Diagnostic",
+          "description": "Analyser la situation, les besoins et les contraintes."
+        },
+        {
+          "id": "conseil",
+          "title": "Conseil stratégique",
+          "description": "Comparer les options et construire une direction solide."
+        },
+        {
+          "id": "mission",
+          "title": "Mission complète",
+          "description": "Piloter le projet et sécuriser chaque décision."
+        }
+      ]
+    },
+    "about": {
+      "enabled": true,
+      "eyebrow": "La méthode",
+      "title": "Écouter avant de conseiller.",
+      "description": "Chaque collaboration suit quatre étapes simples : échange, diagnostic, recommandations puis accompagnement. Vous savez toujours où en est votre projet et pourquoi chaque choix est proposé.",
+      "image": {
+        "src": "/templates/template-09/professional-hero.jpg",
+        "alt": "Professionnelle examinant un dossier"
+      }
+    },
+    "gallery": { "enabled": false, "title": "Réalisations", "images": [] },
+    "testimonials": {
+      "enabled": true,
+      "title": "Une relation fondée sur la confiance",
+      "items": [
+        {
+          "id": "a1",
+          "quote": "Des explications limpides et un accompagnement très rassurant du début à la fin.",
+          "author": "Client du cabinet",
+          "role": "Mission de conseil"
+        }
+      ]
+    },
+    "faq": {
+      "enabled": true,
+      "title": "Questions fréquentes",
+      "items": [
+        {
+          "id": "f1",
+          "question": "Comment se déroule le premier échange ?",
+          "answer": "Un rendez-vous permet de comprendre votre besoin et de définir clairement la mission."
+        },
+        {
+          "id": "f2",
+          "question": "Les honoraires sont-ils annoncés à l'avance ?",
+          "answer": "Oui, une proposition détaillée est transmise avant tout démarrage."
+        },
+        {
+          "id": "f3",
+          "question": "Intervenez-vous à distance ?",
+          "answer": "Selon la mission, les rendez-vous peuvent avoir lieu au cabinet, sur site ou à distance."
+        }
+      ]
+    },
+    "contact": {
+      "eyebrow": "Premier échange",
+      "title": "Parlons de votre projet.",
+      "description": "Décrivez brièvement votre situation pour organiser un premier rendez-vous sans engagement.",
+      "phoneLabel": "Appeler le cabinet",
+      "emailLabel": "Écrire au cabinet",
+      "addressLabel": "Cabinet",
+      "hoursLabel": "Horaires"
+    },
+    "footer": {
+      "tagline": "Conseil indépendant à Toulouse.",
+      "copyright": "© Cabinet Claire Rivière — Tous droits réservés"
+    }
+  },
+  "socialLinks": { "facebook": "", "instagram": "", "google": "" },
+  "seo": {
+    "title": "Cabinet Claire Rivière | Conseil à Toulouse",
+    "description": "Accompagnement indépendant, diagnostic et conseil stratégique à Toulouse.",
+    "socialImage": "/templates/template-09/professional-hero.jpg"
+  }
+}
