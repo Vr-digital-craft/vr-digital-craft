@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title description">
+  <title id="title">Aperçu du modèle One Page moderne</title>
+  <desc id="description">Composition graphique orange et bleu nuit avec un grand titre.</desc>
+  <rect width="1200" height="760" fill="#ff5b36"/>
+  <rect width="1200" height="92" fill="#f5f0e8"/>
+  <text x="72" y="58" fill="#18152d" font-family="Arial, sans-serif" font-size="28" font-weight="700">ATELIER NOVA</text>
+  <circle cx="1100" cy="46" r="15" fill="none" stroke="#18152d" stroke-width="4"/>
+  <path d="M1060 46h25M1115 46h25" stroke="#18152d" stroke-width="4"/>
+  <text x="72" y="205" fill="#18152d" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="4">SERVICES AUX PROFESSIONNELS</text>
+  <text x="72" y="345" fill="#18152d" font-family="Arial, sans-serif" font-size="102" font-weight="700" letter-spacing="-5">VOTRE PROJET.</text>
+  <text x="72" y="455" fill="#18152d" font-family="Arial, sans-serif" font-size="102" font-weight="700" letter-spacing="-5">NOTRE ÉNERGIE.</text>
+  <text x="76" y="535" fill="#18152d" font-family="Arial, sans-serif" font-size="27">Un partenaire local. Une méthode simple.</text>
+  <rect x="72" y="610" width="250" height="70" fill="#18152d"/>
+  <text x="105" y="655" fill="#f5f0e8" font-family="Arial, sans-serif" font-size="18" font-weight="700">DÉCOUVRIR →</text>
+  <path d="M950 560l180-180M1015 380h115v115" fill="none" stroke="#f5f0e8" stroke-width="12"/>
+</svg>

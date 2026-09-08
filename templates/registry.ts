@@ -115,7 +115,7 @@ export const templateRegistry: TemplateMetadata[] = [
     description:
       "Une page unique dynamique pour présenter rapidement une petite entreprise et convertir les visiteurs.",
     sectors: ["services", "commerce", "artisan"],
-    previewImage: "/img/work-artisan.jpg",
+    previewImage: "/templates/template-10/preview.svg",
     demoConfig: "templates/template-10/site.config.json",
     version: 1,
     enabled: true,
