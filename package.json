@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "validate:templates": "node scripts/validate-templates.mjs",
     "preview": "vite preview",
-    "deploy:cloudflare": "pnpm run build && wrangler deploy",
+    "deploy:cloudflare": "vite build && wrangler deploy",
     "cf-typegen": "wrangler types",
     "lint": "eslint .",
     "format": "prettier --write ."
