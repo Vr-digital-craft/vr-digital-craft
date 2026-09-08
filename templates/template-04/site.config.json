@@ -4,7 +4,7 @@
     { "label": "Accueil", "href": "#accueil" },
     { "label": "L'institut", "href": "#a-propos" },
     { "label": "Soins & tarifs", "href": "#services" },
-    { "label": "Équipe", "href": "#equipe" },
+    { "label": "Galerie", "href": "#galerie" },
     { "label": "Contact", "href": "#contact" }
   ],
   "business": {

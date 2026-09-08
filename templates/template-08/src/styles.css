@@ -16,9 +16,20 @@
   justify-content: space-between;
   padding: 28px 5vw;
 }
+.dark-brand {
+  color: inherit;
+}
 .dark nav {
   display: flex;
   gap: 32px;
+}
+.dark-menu {
+  display: none;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
 }
 .dark-hero {
   height: 850px;
@@ -74,6 +85,31 @@
   margin-top: 35px;
   padding: 18px 24px;
 }
+.dark-trust {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid #333;
+}
+.dark-trust span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 76px;
+  padding: 18px;
+  border-right: 1px solid #333;
+  color: #c9c9c9;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.dark-trust span:last-child {
+  border-right: 0;
+}
+.dark-trust svg {
+  width: 15px;
+  color: var(--gold);
+}
 .dark-services {
   padding: 130px 7vw;
 }
@@ -96,14 +132,187 @@
 }
 .dark-about {
   background: #141515;
-  padding: 150px 18vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8vw;
+  align-items: center;
+  padding: 130px 8vw;
 }
 .dark-about span {
   font-size: 22px;
   line-height: 1.7;
 }
+.dark-about img {
+  width: 100%;
+  height: 580px;
+  object-fit: cover;
+}
+.dark-work {
+  padding: 130px 7vw;
+}
+.dark-work > div {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-top: 50px;
+}
+.dark-work figure {
+  position: relative;
+  height: 560px;
+  margin: 0;
+  overflow: hidden;
+}
+.dark-work img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+.dark-work figure:hover img {
+  transform: scale(1.025);
+}
+.dark-work figcaption {
+  position: absolute;
+  inset: auto 20px 20px;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.dark-reviews {
+  padding: 120px 12vw;
+  background: #141515;
+  text-align: center;
+}
+.dark-reviews blockquote {
+  max-width: 900px;
+  margin: 45px auto 0;
+}
+.dark-reviews blockquote > span {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  color: var(--gold);
+}
+.dark-reviews blockquote svg {
+  width: 15px;
+  fill: currentColor;
+}
+.dark-reviews blockquote p {
+  color: #eee;
+  font:
+    italic 400 clamp(25px, 3vw, 42px)/1.5 Georgia,
+    serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.dark-reviews footer {
+  font-size: 12px;
+  text-transform: uppercase;
+}
 .dark-contact {
   padding: 140px 12vw;
+}
+.dark-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 28px;
+}
+.dark-details a,
+.dark-details span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dark-details a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.dark-details svg {
+  width: 17px;
+}
+.dark-inquiry {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 8vw;
+  padding: 130px 8vw;
+  background: #101111;
+}
+.dark-inquiry > div > span {
+  display: block;
+  font-size: 17px;
+  line-height: 1.7;
+}
+.dark-inquiry form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.dark-inquiry label {
+  display: grid;
+  gap: 8px;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.dark-inquiry input,
+.dark-inquiry select,
+.dark-inquiry textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 13px 14px;
+  border: 1px solid #454747;
+  border-radius: 0;
+  background: #181919;
+  color: #eee;
+  font:
+    16px/1.4 "DM Sans",
+    sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.dark-message,
+.dark-consent {
+  grid-column: 1/-1;
+}
+.dark-inquiry .dark-consent {
+  display: flex;
+  align-items: flex-start;
+  color: #b9b9b9;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.dark-consent input {
+  width: 18px;
+  min-height: 18px;
+  margin-top: 2px;
+}
+.dark-inquiry button {
+  grid-column: 1/-1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: #eee;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dark-mobile-actions {
+  display: none;
+}
+.dark :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }
 .dark footer {
   border-top: 1px solid #333;
@@ -113,6 +322,25 @@
 @media (max-width: 700px) {
   .dark nav {
     display: none;
+  }
+  .dark header {
+    position: relative;
+    z-index: 6;
+  }
+  .dark-menu {
+    display: block;
+  }
+  .dark nav.dark-nav-open {
+    position: absolute;
+    inset: 100% 0 auto;
+    display: grid;
+    gap: 0;
+    padding: 10px 22px 22px;
+    border-bottom: 1px solid #333;
+    background: var(--black);
+  }
+  .dark nav.dark-nav-open a {
+    padding: 12px 0;
   }
   .dark-hero {
     height: 760px;
@@ -126,10 +354,63 @@
   }
   .dark-services,
   .dark-about,
-  .dark-contact {
+  .dark-work,
+  .dark-reviews,
+  .dark-contact,
+  .dark-inquiry {
     padding: 90px 22px;
   }
   .dark-services > div {
     grid-template-columns: 1fr;
+  }
+  .dark-about,
+  .dark-inquiry,
+  .dark-work > div,
+  .dark-inquiry form {
+    grid-template-columns: 1fr;
+  }
+  .dark-about img,
+  .dark-work figure {
+    height: 420px;
+  }
+  .dark-message,
+  .dark-consent,
+  .dark-inquiry button {
+    grid-column: auto;
+  }
+  .dark-trust {
+    grid-template-columns: 1fr 1fr;
+  }
+  .dark-trust span {
+    justify-content: flex-start;
+    border-bottom: 1px solid #333;
+  }
+  .dark-mobile-actions {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--black);
+    border-top: 1px solid #333;
+  }
+  .dark-mobile-actions a {
+    justify-content: center;
+    min-height: 56px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .dark-mobile-actions a:last-child {
+    background: var(--gold);
+    color: #080909;
+  }
+  .dark-mobile-actions svg {
+    width: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dark-work img {
+    transition: none;
   }
 }

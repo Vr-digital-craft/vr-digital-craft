@@ -11,19 +11,36 @@ pnpm install
 pnpm dev
 ```
 
-## Production
+## Production et hébergement Cloudflare
 
 ```bash
 pnpm build
 ```
 
-Le déploiement Netlify est configuré dans `netlify.toml` :
+Le projet est préparé pour Cloudflare Workers avec l'offre gratuite. Cette cible est adaptée au rendu serveur utilisé par TanStack Start ; il ne faut pas configurer le projet comme un simple site statique Cloudflare Pages.
 
-- commande de construction : `pnpm run build` ;
-- dossier publié : `dist/client` ;
-- fonctions serveur générées automatiquement par le plugin Netlify pour TanStack Start.
+Première connexion au compte Cloudflare :
 
-Un envoi sur la branche principale déclenche le déploiement continu lorsque le dépôt GitHub est relié à Netlify. Les réglages saisis manuellement dans l'interface Netlify doivent reprendre les mêmes valeurs.
+```bash
+pnpm wrangler login
+```
+
+Vérification locale du résultat Cloudflare :
+
+```bash
+pnpm build
+pnpm preview
+```
+
+Mise en ligne manuelle :
+
+```bash
+pnpm deploy:cloudflare
+```
+
+Le fichier `wrangler.jsonc` contient la configuration de déploiement. Cloudflare attribuera d'abord une adresse gratuite en `workers.dev`. Le nom de domaine définitif pourra ensuite être ajouté depuis **Workers & Pages → vr-digital → Settings → Domains & Routes**.
+
+Pour un déploiement automatique depuis GitHub, créer une application Workers dans Cloudflare, connecter le dépôt `Vr-digital-craft/vr-digital-craft`, choisir la branche `main` et conserver la commande de construction `pnpm build`. Ne désactivez le site Netlify qu'après avoir vérifié l'adresse Cloudflare et le formulaire de contact.
 
 L'administration actuelle conserve les projets dans le navigateur utilisé. Elle ne constitue pas encore un espace multi-appareils : le stockage distant et l'authentification seront ajoutés séparément avant d'y conserver des données clients en production.
 

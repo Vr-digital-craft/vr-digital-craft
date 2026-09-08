@@ -1,14 +1,48 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, Check, Clock3, Mail, MapPin, Menu, Phone, Star } from "lucide-react";
 import type { SiteConfig } from "../../../packages/template-core/src";
 import "./styles.css";
 
 export function GarageTemplate({ config }: { config: SiteConfig }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const colors = {
     "--garage-accent": config.branding.primaryColor,
     "--garage-dark": config.branding.secondaryColor,
   } as CSSProperties;
   const tel = `tel:${config.business.phone.replace(/\s/g, "")}`;
+  const locationLabel = `${config.business.address}, ${config.business.city}`;
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(locationLabel)}&output=embed`;
+  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationLabel)}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    name: config.business.name,
+    description: config.business.description,
+    telephone: config.business.phone,
+    email: config.business.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: config.business.address,
+      addressLocality: config.business.city,
+      addressCountry: "FR",
+    },
+    image: config.seo.socialImage,
+  };
+
+  function handleAppointment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const subject = `Demande de rendez-vous — ${String(data.get("vehicle") || "véhicule")}`;
+    const body = [
+      `Nom : ${String(data.get("name") || "")}`,
+      `Téléphone : ${String(data.get("phone") || "")}`,
+      `Véhicule : ${String(data.get("vehicle") || "")}`,
+      `Prestation : ${String(data.get("service") || "")}`,
+      "",
+      String(data.get("message") || ""),
+    ].join("\n");
+    window.location.href = `mailto:${config.business.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
 
   return (
     <div className="garage-site" style={colors}>
@@ -23,9 +57,13 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
             </>
           )}
         </a>
-        <nav aria-label="Navigation principale">
+        <nav
+          id="garage-navigation"
+          className={menuOpen ? "garage-nav-open" : ""}
+          aria-label="Navigation principale"
+        >
           {config.navigation.map((link) => (
-            <a key={link.href} href={link.href}>
+            <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
               {link.label}
             </a>
           ))}
@@ -34,7 +72,16 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
           <Phone />
           {config.business.phone}
         </a>
-        <Menu className="garage-menu" aria-hidden="true" />
+        <button
+          className="garage-menu"
+          type="button"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-controls="garage-navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <Menu aria-hidden="true" />
+        </button>
       </header>
 
       <main>
@@ -75,10 +122,15 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
         </section>
 
         <section className="garage-trust" aria-label="Prestations principales">
-          {config.content.services.items.slice(0, 4).map((service) => (
-            <span key={service.id}>
+          {[
+            "Toutes marques",
+            "Devis avant intervention",
+            "Diagnostic précis",
+            "Suivi transparent",
+          ].map((label) => (
+            <span key={label}>
               <Check />
-              {service.title}
+              {label}
             </span>
           ))}
         </section>
@@ -102,6 +154,12 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
                 </div>
               </article>
             ))}
+          </div>
+          <div className="garage-services-cta">
+            <p>Un voyant s'allume ou un bruit vous inquiète ?</p>
+            <a className="garage-button garage-button-primary" href="#contact">
+              Prendre rendez-vous <ArrowRight />
+            </a>
           </div>
         </section>
 
@@ -160,7 +218,7 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
                 <blockquote key={item.id}>
                   <div aria-label="5 étoiles">
                     {[0, 1, 2, 3, 4].map((star) => (
-                      <Star key={star} />
+                      <Star key={star} aria-hidden="true" />
                     ))}
                   </div>
                   <p>“{item.quote}”</p>
@@ -215,6 +273,75 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
             </div>
           </address>
         </section>
+        <section className="garage-booking" aria-label="Demande de rendez-vous et localisation">
+          <form onSubmit={handleAppointment}>
+            <div className="garage-heading">
+              <p>Demande de rendez-vous</p>
+              <h2>Décrivez votre besoin.</h2>
+              <span>
+                Votre demande sera préparée dans votre application e-mail. Le garage vous
+                recontactera pour confirmer le créneau.
+              </span>
+            </div>
+            <div className="garage-form-grid">
+              <label>
+                Nom et prénom
+                <input name="name" autoComplete="name" required />
+              </label>
+              <label>
+                Téléphone
+                <input name="phone" type="tel" autoComplete="tel" required />
+              </label>
+              <label>
+                Véhicule
+                <input name="vehicle" placeholder="Marque, modèle, année" required />
+              </label>
+              <label>
+                Prestation
+                <select name="service" defaultValue="Entretien et révision">
+                  <option>Entretien et révision</option>
+                  <option>Diagnostic électronique</option>
+                  <option>Freinage</option>
+                  <option>Pneumatiques</option>
+                  <option>Autre demande</option>
+                </select>
+              </label>
+              <label className="garage-form-message">
+                Message
+                <textarea
+                  name="message"
+                  rows={5}
+                  placeholder="Précisez le problème ou vos disponibilités"
+                />
+              </label>
+              <label className="garage-consent">
+                <input name="consent" type="checkbox" required /> J'accepte que mes informations
+                soient utilisées pour répondre à cette demande.
+              </label>
+            </div>
+            <button className="garage-button garage-button-primary" type="submit">
+              Envoyer ma demande <ArrowRight />
+            </button>
+          </form>
+          <div className="garage-location">
+            <iframe
+              title={`Localisation de ${config.business.name}`}
+              src={mapUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div>
+              <MapPin aria-hidden="true" />
+              <p>
+                <strong>{config.business.name}</strong>
+                <span>{locationLabel}</span>
+              </p>
+              <a href={directionsUrl} target="_blank" rel="noreferrer">
+                Obtenir l'itinéraire <ArrowRight />
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
       <footer className="garage-footer">
         <div className="garage-brand">
@@ -224,6 +351,18 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
         <p>{config.content.footer.tagline}</p>
         <small>{config.content.footer.copyright}</small>
       </footer>
+      <div className="garage-mobile-actions" aria-label="Actions rapides">
+        <a href={tel}>
+          <Phone aria-hidden="true" /> Appeler
+        </a>
+        <a href="#contact">
+          <Clock3 aria-hidden="true" /> Rendez-vous
+        </a>
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </div>
   );
 }

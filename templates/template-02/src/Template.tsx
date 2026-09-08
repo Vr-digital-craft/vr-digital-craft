@@ -1,14 +1,50 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowDown, ArrowRight, Clock3, Mail, MapPin, Menu, Phone, Star } from "lucide-react";
 import type { SiteConfig } from "../../../packages/template-core/src";
 import "./styles.css";
 
 export function RestaurantTemplate({ config }: { config: SiteConfig }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const colors = {
     "--restaurant-wine": config.branding.primaryColor,
     "--restaurant-green": config.branding.secondaryColor,
   } as CSSProperties;
   const tel = `tel:${config.business.phone.replace(/\s/g, "")}`;
+  const locationLabel = `${config.business.address}, ${config.business.city}`;
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(locationLabel)}&output=embed`;
+  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationLabel)}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    name: config.business.name,
+    description: config.business.description,
+    telephone: config.business.phone,
+    email: config.business.email,
+    servesCuisine: "Cuisine française de saison",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: config.business.address,
+      addressLocality: config.business.city,
+      addressCountry: "FR",
+    },
+    image: config.seo.socialImage,
+  };
+
+  function handleReservation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const subject = `Demande de réservation — ${String(data.get("date") || "Restaurant")}`;
+    const body = [
+      `Nom : ${String(data.get("name") || "")}`,
+      `Téléphone : ${String(data.get("phone") || "")}`,
+      `Date : ${String(data.get("date") || "")}`,
+      `Heure : ${String(data.get("time") || "")}`,
+      `Nombre de personnes : ${String(data.get("guests") || "")}`,
+      "",
+      String(data.get("message") || ""),
+    ].join("\n");
+    window.location.href = `mailto:${config.business.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
 
   return (
     <div className="restaurant-site" style={colors}>
@@ -27,9 +63,13 @@ export function RestaurantTemplate({ config }: { config: SiteConfig }) {
             </>
           )}
         </a>
-        <nav aria-label="Navigation principale">
+        <nav
+          id="restaurant-navigation"
+          className={menuOpen ? "restaurant-nav-open" : ""}
+          aria-label="Navigation principale"
+        >
           {config.navigation.map((link) => (
-            <a key={link.href} href={link.href}>
+            <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
               {link.label}
             </a>
           ))}
@@ -38,7 +78,16 @@ export function RestaurantTemplate({ config }: { config: SiteConfig }) {
           {config.content.hero.primaryAction.label}
           <ArrowRight />
         </a>
-        <Menu className="restaurant-menu-icon" aria-hidden="true" />
+        <button
+          className="restaurant-menu-icon"
+          type="button"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-controls="restaurant-navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <Menu aria-hidden="true" />
+        </button>
       </header>
 
       <main>
@@ -134,7 +183,7 @@ export function RestaurantTemplate({ config }: { config: SiteConfig }) {
                 <blockquote key={item.id}>
                   <span aria-label="5 étoiles">
                     {[0, 1, 2, 3, 4].map((star) => (
-                      <Star key={star} />
+                      <Star key={star} aria-hidden="true" />
                     ))}
                   </span>
                   <p>“{item.quote}”</p>
@@ -194,6 +243,71 @@ export function RestaurantTemplate({ config }: { config: SiteConfig }) {
             </a>
           </address>
         </section>
+        <section className="restaurant-reservation" aria-label="Réservation et localisation">
+          <form onSubmit={handleReservation}>
+            <p className="restaurant-kicker">Demande de réservation</p>
+            <h2>Préparez votre venue.</h2>
+            <p className="restaurant-form-intro">
+              Votre demande sera préparée dans votre application e-mail. La table reste à confirmer
+              par le restaurant.
+            </p>
+            <div className="restaurant-form-grid">
+              <label>
+                Nom et prénom
+                <input name="name" autoComplete="name" required />
+              </label>
+              <label>
+                Téléphone
+                <input name="phone" type="tel" autoComplete="tel" required />
+              </label>
+              <label>
+                Date souhaitée
+                <input name="date" type="date" required />
+              </label>
+              <label>
+                Heure souhaitée
+                <input name="time" type="time" required />
+              </label>
+              <label>
+                Nombre de personnes
+                <input name="guests" type="number" min="1" max="30" required />
+              </label>
+              <label className="restaurant-form-message">
+                Message
+                <textarea
+                  name="message"
+                  rows={4}
+                  placeholder="Allergies, poussette, occasion particulière…"
+                />
+              </label>
+              <label className="restaurant-consent">
+                <input name="consent" type="checkbox" required /> J'accepte que mes informations
+                soient utilisées pour répondre à cette demande.
+              </label>
+            </div>
+            <button className="restaurant-solid-button" type="submit">
+              Envoyer ma demande <ArrowRight />
+            </button>
+          </form>
+          <div className="restaurant-location">
+            <iframe
+              title={`Localisation de ${config.business.name}`}
+              src={mapUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div>
+              <MapPin aria-hidden="true" />
+              <p>
+                <strong>{config.business.name}</strong>
+                <span>{locationLabel}</span>
+              </p>
+              <a href={directionsUrl} target="_blank" rel="noreferrer">
+                Obtenir l'itinéraire <ArrowRight />
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="restaurant-footer">
@@ -204,6 +318,18 @@ export function RestaurantTemplate({ config }: { config: SiteConfig }) {
         <p>{config.content.footer.tagline}</p>
         <small>{config.content.footer.copyright}</small>
       </footer>
+      <div className="restaurant-mobile-actions" aria-label="Actions rapides">
+        <a href={tel}>
+          <Phone aria-hidden="true" /> Appeler
+        </a>
+        <a href="#contact">
+          <Clock3 aria-hidden="true" /> Réserver
+        </a>
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </div>
   );
 }

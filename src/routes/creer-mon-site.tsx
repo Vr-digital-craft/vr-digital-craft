@@ -39,6 +39,27 @@ function CreateSitePage() {
   const selectedTemplate = templateRegistry.find(
     (template) => template.id === templateId && template.enabled,
   );
+  const selectedTemplateConfig = selectedTemplate
+    ? runtimeTemplates[selectedTemplate.id]?.config
+    : undefined;
+  const servicePlaceholder =
+    selectedTemplate?.id === "template-02"
+      ? "Un élément par ligne : Nom | Description\nEntrée | Légumes du marché et crème aux herbes\nPlat | Poisson de la criée et légumes de saison\nDessert | Chocolat et noisette"
+      : selectedTemplate?.id === "template-04"
+        ? "Un soin par ligne : Nom | Durée, description et tarif\nSoin visage | 60 min · Soin personnalisé — 75 €\nMassage | 75 min · Massage relaxant — 90 €\nMise en beauté | 45 min · Maquillage naturel — 55 €"
+        : selectedTemplate?.id === "template-05"
+          ? "Une catégorie par ligne : Nom | Description\nMaison & décoration | Céramiques, bougies et textiles\nCadeaux | Des attentions originales pour toutes les occasions\nCréateurs locaux | Des pièces fabriquées près de chez nous"
+          : selectedTemplate?.id === "template-06"
+            ? "Un bien par ligne : Nom | Localisation, pièces, surface, prix, DPE et référence\nAppartement de caractère | Centre-ville · 4 pièces · 128 m² · 695 000 € · DPE C\nMaison familiale | Quartier résidentiel · 5 pièces · 165 m² · 845 000 € · DPE D"
+            : selectedTemplate?.id === "template-07"
+              ? "Une expertise par ligne : Nom | Description\nStratégie | Clarifier les priorités et construire une feuille de route\nTransformation | Faire évoluer l'organisation et les méthodes\nPerformance | Piloter les résultats avec des indicateurs utiles"
+              : selectedTemplate?.id === "template-08"
+                ? "Une expertise par ligne : Nom | Description\nConcept | Identité, volumes et matières\nDesign intérieur | Espaces, mobilier et lumière\nRéalisation | Coordination et suivi exigeant"
+                : selectedTemplate?.id === "template-09"
+                  ? "Un accompagnement par ligne : Nom | Description\nDiagnostic | Analyser la situation, les besoins et les contraintes\nConseil stratégique | Comparer les options et construire une direction solide\nMission complète | Piloter le projet et sécuriser chaque décision"
+                  : selectedTemplate?.id === "template-10"
+                    ? "Un service par ligne : Nom | Description\nConseil | Cadrer le besoin et choisir la bonne direction\nCréation | Transformer l’idée en solution claire et attractive\nSuivi | Mesurer, ajuster et rester disponible dans la durée"
+                    : "Un service par ligne : Nom | Description\nConstruction | Murs, extensions et dalles\nRénovation | Transformation de bâtiments anciens";
   const [errors, setErrors] = useState<string[]>([]);
   const [draft, setDraft] = useState<ClientBriefDraft | null>(null);
   const [formDefaults, setFormDefaults] = useState<ClientBriefDraft | null>(null);
@@ -258,9 +279,7 @@ function CreateSitePage() {
                         name="services"
                         defaultValue={formDefaults?.services.join("\n")}
                         rows={6}
-                        placeholder={
-                          "Un service par ligne : Nom | Description\nConstruction | Murs, extensions et dalles\nRénovation | Transformation de bâtiments anciens"
-                        }
+                        placeholder={servicePlaceholder}
                       />
                     </div>
                   </FormSection>
@@ -270,12 +289,20 @@ function CreateSitePage() {
                       <ColorField
                         label="Couleur principale"
                         name="primaryColor"
-                        defaultValue={formDefaults?.colors.primary || "#d95d25"}
+                        defaultValue={
+                          formDefaults?.colors.primary ||
+                          selectedTemplateConfig?.branding.primaryColor ||
+                          "#d95d25"
+                        }
                       />
                       <ColorField
                         label="Couleur secondaire"
                         name="secondaryColor"
-                        defaultValue={formDefaults?.colors.secondary || "#17324d"}
+                        defaultValue={
+                          formDefaults?.colors.secondary ||
+                          selectedTemplateConfig?.branding.secondaryColor ||
+                          "#17324d"
+                        }
                       />
                       <FileField
                         label="Logo"

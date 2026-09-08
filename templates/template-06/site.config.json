@@ -42,7 +42,7 @@
         {
           "id": "appartement",
           "title": "Appartement de caractère",
-          "description": "Toulouse centre · 4 pièces · 128 m²",
+          "description": "Toulouse centre · 4 pièces · 128 m² · 695 000 € · DPE C · Réf. AI-1042",
           "image": {
             "src": "/templates/template-06/real-estate-interior.jpg",
             "alt": "Appartement lumineux avec moulures et grandes fenêtres"
@@ -51,7 +51,7 @@
         {
           "id": "villa",
           "title": "Villa contemporaine",
-          "description": "Coteaux toulousains · 6 pièces · 240 m²",
+          "description": "Coteaux toulousains · 6 pièces · 240 m² · 1 190 000 € · DPE B · Réf. AI-1187",
           "image": {
             "src": "/templates/template-06/real-estate-hero.jpg",
             "alt": "Villa contemporaine avec jardin"
@@ -60,7 +60,7 @@
         {
           "id": "quartier",
           "title": "Maison de ville",
-          "description": "Quartier recherché · 5 pièces · 165 m²",
+          "description": "Quartier recherché · 5 pièces · 165 m² · 845 000 € · DPE D · Réf. AI-1108",
           "image": {
             "src": "/templates/template-06/real-estate-neighborhood.jpg",
             "alt": "Rue résidentielle élégante"

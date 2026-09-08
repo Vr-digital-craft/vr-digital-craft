@@ -1,17 +1,56 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, Clock3, Mail, MapPin, Menu, Phone, Star } from "lucide-react";
 import type { SiteConfig } from "../../../packages/template-core/src";
 import "./styles.css";
 export function RealEstateTemplate({ config }: { config: SiteConfig }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(
+    config.content.services.items[0]?.title ?? "Projet immobilier",
+  );
   const style = {
     "--estate-gold": config.branding.primaryColor,
     "--estate-dark": config.branding.secondaryColor,
   } as CSSProperties;
   const tel = `tel:${config.business.phone.replace(/\s/g, "")}`;
+  const locationLabel = `${config.business.address}, ${config.business.city}`;
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(locationLabel)}&output=embed`;
+  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationLabel)}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: config.business.name,
+    description: config.business.description,
+    telephone: config.business.phone,
+    email: config.business.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: config.business.address,
+      addressLocality: config.business.city,
+      addressCountry: "FR",
+    },
+    image: config.seo.socialImage,
+  };
+
+  function handleEstimate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const subject = `Demande immobilière — ${String(data.get("requestType") || "Projet")}`;
+    const body = [
+      `Nom : ${String(data.get("name") || "")}`,
+      `Téléphone : ${String(data.get("phone") || "")}`,
+      `Demande : ${String(data.get("requestType") || "")}`,
+      `Bien : ${String(data.get("property") || "")}`,
+      `Ville / quartier : ${String(data.get("location") || "")}`,
+      `Surface approximative : ${String(data.get("surface") || "")}`,
+      "",
+      String(data.get("message") || ""),
+    ].join("\n");
+    window.location.href = `mailto:${config.business.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
   return (
     <div className="estate-site" style={style}>
       <header>
-        <a className="estate-brand" href="#accueil">
+        <a className="estate-brand" href="#accueil" aria-label={`${config.business.name}, accueil`}>
           {config.branding.logo ? (
             <img src={config.branding.logo.src} alt={config.branding.logo.alt} />
           ) : (
@@ -21,9 +60,13 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
             </>
           )}
         </a>
-        <nav>
+        <nav
+          id="estate-navigation"
+          className={menuOpen ? "estate-nav-open" : ""}
+          aria-label="Navigation principale"
+        >
           {config.navigation.map((l) => (
-            <a key={l.href} href={l.href}>
+            <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
               {l.label}
             </a>
           ))}
@@ -32,7 +75,16 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
           <Phone />
           {config.business.phone}
         </a>
-        <Menu className="estate-menu" />
+        <button
+          className="estate-menu"
+          type="button"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-controls="estate-navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <Menu aria-hidden="true" />
+        </button>
       </header>
       <main>
         <section className="estate-hero" id="accueil">
@@ -50,6 +102,19 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
             </a>
           </div>
         </section>
+        <section className="estate-trust" aria-label="Les engagements de l'agence">
+          {[
+            "Estimation confidentielle",
+            "Expertise locale",
+            "Suivi personnalisé",
+            "Interlocuteur dédié",
+          ].map((item) => (
+            <span key={item}>
+              <MapPin aria-hidden="true" />
+              {item}
+            </span>
+          ))}
+        </section>
         <section className="estate-listings" id="biens">
           <div className="estate-heading">
             <p>{config.content.services.eyebrow}</p>
@@ -63,7 +128,13 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
                 <div>
                   <h3>{s.title}</h3>
                   <p>{s.description}</p>
-                  <ArrowRight />
+                  <a
+                    href="#estate-inquiry"
+                    onClick={() => setSelectedProperty(s.title)}
+                    aria-label={`Demander des informations sur ${s.title}`}
+                  >
+                    Voir le bien <ArrowRight aria-hidden="true" />
+                  </a>
                 </div>
               </article>
             ))}
@@ -110,7 +181,7 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
                 <blockquote key={x.id}>
                   <span>
                     {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} />
+                      <Star key={i} aria-hidden="true" />
                     ))}
                   </span>
                   <p>“{x.quote}”</p>
@@ -167,12 +238,111 @@ export function RealEstateTemplate({ config }: { config: SiteConfig }) {
             </a>
           </address>
         </section>
+        <section
+          className="estate-inquiry"
+          id="estate-inquiry"
+          aria-label="Estimation et localisation"
+        >
+          <form onSubmit={handleEstimate}>
+            <p>Votre projet immobilier</p>
+            <h2>Recevez un premier avis confidentiel.</h2>
+            <span>
+              Votre demande sera préparée dans votre application e-mail. L'agence vous recontactera
+              pour préciser votre projet.
+            </span>
+            <div className="estate-form-grid">
+              <label>
+                Nom et prénom
+                <input name="name" autoComplete="name" required />
+              </label>
+              <label>
+                Téléphone
+                <input name="phone" type="tel" autoComplete="tel" required />
+              </label>
+              <label>
+                Votre demande
+                <select name="requestType" defaultValue="Estimer mon bien">
+                  <option>Estimer mon bien</option>
+                  <option>Vendre un bien</option>
+                  <option>Acheter un bien</option>
+                  <option>Obtenir des informations</option>
+                </select>
+              </label>
+              <label>
+                Bien concerné
+                <select
+                  name="property"
+                  value={selectedProperty}
+                  onChange={(event) => setSelectedProperty(event.target.value)}
+                >
+                  <option>Mon propre bien</option>
+                  {config.content.services.items.map((property) => (
+                    <option key={property.id}>{property.title}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Ville ou quartier
+                <input name="location" autoComplete="address-level2" required />
+              </label>
+              <label>
+                Surface approximative
+                <input name="surface" inputMode="numeric" placeholder="Ex. 95 m²" />
+              </label>
+              <label className="estate-form-message">
+                Votre projet
+                <textarea
+                  name="message"
+                  rows={5}
+                  placeholder="Décrivez le bien, votre recherche ou votre calendrier"
+                />
+              </label>
+              <label className="estate-consent">
+                <input name="consent" type="checkbox" required /> J'accepte que mes informations
+                soient utilisées pour répondre à cette demande.
+              </label>
+            </div>
+            <button type="submit">
+              Envoyer ma demande <ArrowRight />
+            </button>
+          </form>
+          <div className="estate-location">
+            <iframe
+              title={`Localisation de ${config.business.name}`}
+              src={mapUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div>
+              <MapPin aria-hidden="true" />
+              <p>
+                <strong>{config.business.name}</strong>
+                <span>{locationLabel}</span>
+              </p>
+              <a href={directionsUrl} target="_blank" rel="noreferrer">
+                Obtenir l'itinéraire <ArrowRight />
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
       <footer>
         <strong>{config.business.name}</strong>
         <p>{config.content.footer.tagline}</p>
         <small>{config.content.footer.copyright}</small>
       </footer>
+      <div className="estate-mobile-actions" aria-label="Actions rapides">
+        <a href={tel}>
+          <Phone aria-hidden="true" /> Appeler
+        </a>
+        <a href="#estate-inquiry">
+          <MapPin aria-hidden="true" /> Estimer
+        </a>
+      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </div>
   );
 }
