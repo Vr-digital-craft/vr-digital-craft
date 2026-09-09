@@ -1,5 +1,6 @@
 import type { SiteConfig } from "../../../packages/template-core/src";
 import type { ClientBriefDraft } from "./client-brief";
+import type { AiProviderName } from "../ai/site-copy";
 
 export type ProjectStatus =
   | "nouveau"
@@ -19,6 +20,8 @@ export type GeneratedProject = {
   createdAt: string;
   updatedAt: string;
   archived: boolean;
+  lastAiProvider?: AiProviderName;
+  lastAiModel?: string;
   config: SiteConfig;
 };
 

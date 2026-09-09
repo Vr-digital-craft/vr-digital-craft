@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "validate:templates": "node scripts/validate-templates.mjs",
+    "validate:ai": "node scripts/validate-ai-pipeline.mjs",
     "preview": "vite preview",
     "deploy:cloudflare": "vite build && wrangler deploy",
     "cf-typegen": "wrangler types",

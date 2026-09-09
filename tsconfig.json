@@ -4,6 +4,7 @@
     "src/**/*.tsx",
     "packages/**/*.ts",
     "templates/**/*.ts",
+    "worker-configuration.d.ts",
     "vite.config.ts",
     "eslint.config.js"
   ],

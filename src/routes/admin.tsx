@@ -13,8 +13,11 @@ import {
   RotateCcw,
   LockKeyhole,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 import { getAdminSession, loginAdmin, logoutAdmin } from "@/modules/admin/admin-auth.functions";
+import { generateSiteCopy } from "@/modules/ai/generate-site-copy.functions";
+import { applyGeneratedCopy } from "@/modules/ai/site-copy";
 import { getAllLocalProjects, updateLocalProject } from "@/modules/projects/browser-project-store";
 import type { GeneratedProject, ProjectStatus } from "@/modules/projects/generated-project";
 
@@ -115,7 +118,10 @@ function AdminLogin({ configured }: { configured: boolean }) {
             {submitting ? "CONNEXION…" : "SE CONNECTER"}
           </button>
         </form>
-        <a href="/" className="mt-6 block text-center text-sm text-muted-foreground hover:text-foreground">
+        <a
+          href="/"
+          className="mt-6 block text-center text-sm text-muted-foreground hover:text-foreground"
+        >
           Retour au site
         </a>
       </section>
@@ -315,9 +321,39 @@ function ProjectCard({
   project: GeneratedProject;
   onChange: (project: GeneratedProject, changes: Partial<GeneratedProject>) => Promise<void>;
 }) {
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiMessage, setAiMessage] = useState("");
   const date = new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(
     new Date(project.updatedAt),
   );
+
+  async function regenerateWithAi() {
+    setAiLoading(true);
+    setAiMessage("");
+    try {
+      const result = await generateSiteCopy({
+        data: { config: project.config, templateId: project.templateId },
+      });
+      await onChange(project, {
+        config: applyGeneratedCopy(project.config, result.copy),
+        status: "a_controler",
+        lastAiProvider: result.provider,
+        lastAiModel: result.model,
+      });
+      setAiMessage(
+        `Textes générés avec ${result.provider === "cloudflare" ? "Cloudflare AI" : "OpenAI"}.`,
+      );
+    } catch (error) {
+      setAiMessage(
+        error instanceof Error
+          ? error.message
+          : "L'IA est indisponible. Vous pouvez continuer manuellement.",
+      );
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
   return (
     <article className="rounded-xl border border-border bg-card p-5 transition-colors hover:border-border-strong sm:p-6">
       <div className="flex items-start justify-between gap-4">
@@ -329,6 +365,11 @@ function ProjectCard({
           <p className="mt-1 text-sm text-muted-foreground">
             {project.config.business.activity} · {project.config.business.city}
           </p>
+          {project.lastAiProvider && (
+            <p className="label-mono mt-2 text-[0.6rem] text-muted-foreground">
+              IA · {project.lastAiProvider === "cloudflare" ? "Cloudflare AI" : "OpenAI"}
+            </p>
+          )}
         </div>
         <span className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground">
           {project.templateId}
@@ -350,6 +391,21 @@ function ProjectCard({
         >
           <FilePenLine className="size-4" /> Modifier
         </a>
+        {!project.archived && (
+          <button
+            type="button"
+            onClick={regenerateWithAi}
+            disabled={aiLoading}
+            className="flex items-center gap-2 rounded-md border border-border px-3 py-2.5 text-sm hover:border-neon disabled:cursor-wait disabled:opacity-60"
+          >
+            {aiLoading ? (
+              <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
+            {aiLoading ? "Génération…" : "Générer avec l'IA"}
+          </button>
+        )}
         {!project.archived && project.status !== "valide" && (
           <button
             type="button"
@@ -368,6 +424,11 @@ function ProjectCard({
           {project.archived ? "Restaurer" : "Archiver"}
         </button>
       </div>
+      {aiMessage && (
+        <p role="status" className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          {aiMessage}
+        </p>
+      )}
     </article>
   );
 }
