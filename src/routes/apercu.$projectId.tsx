@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, Download, LoaderCircle, LockKeyhole, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Download,
+  LoaderCircle,
+  LockKeyhole,
+  PackageCheck,
+  Send,
+} from "lucide-react";
 import type { SiteConfig } from "../../packages/template-core/src";
 import { runtimeTemplates } from "../../templates/runtime";
-import { applyLocalAssets, type GeneratedProject } from "@/modules/projects/generated-project";
+import {
+  applyLocalAssets,
+  type GeneratedProject,
+  type ProjectAssets,
+} from "@/modules/projects/generated-project";
 import { getAdminSession } from "@/modules/admin/admin-auth.functions";
 import { getLocalProject, updateLocalProject } from "@/modules/projects/browser-project-store";
+import { exportProjectPackage } from "@/modules/projects/export-project";
 
 export const Route = createFileRoute("/apercu/$projectId")({
   loader: () => getAdminSession(),
@@ -24,9 +37,12 @@ function ProjectPreviewPage() {
   const { projectId } = Route.useParams();
   const [project, setProject] = useState<GeneratedProject | null>(null);
   const [config, setConfig] = useState<SiteConfig | null>(null);
+  const [assets, setAssets] = useState<ProjectAssets>({ logo: null, photos: [] });
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [preparing, setPreparing] = useState(false);
+  const [prepared, setPrepared] = useState(false);
 
   useEffect(() => {
     let dispose = () => {};
@@ -44,6 +60,7 @@ function ProjectPreviewPage() {
         dispose = materialized.revoke;
         setProject(stored.project);
         setConfig(materialized.config);
+        setAssets(stored.assets);
       })
       .catch(() => setError("La prévisualisation locale n'a pas pu être chargée."));
     return () => dispose();
@@ -90,6 +107,20 @@ function ProjectPreviewPage() {
     }
   }
 
+  async function prepareSite() {
+    if (!project || !isAdmin || project.status !== "valide" || preparing) return;
+    setPreparing(true);
+    setError("");
+    try {
+      await exportProjectPackage(project, assets);
+      setPrepared(true);
+    } catch {
+      setError("Le dossier complet du site n'a pas pu être préparé.");
+    } finally {
+      setPreparing(false);
+    }
+  }
+
   if (error) return <PreviewMessage title="Prévisualisation indisponible" description={error} />;
   if (!project || !config)
     return (
@@ -121,7 +152,8 @@ function ProjectPreviewPage() {
         {isAdmin ? (
           <>
             <span className="label-mono flex items-center gap-2 text-[0.6rem] text-neon">
-              <CheckCircle2 className="size-4" />À contrôler
+              <CheckCircle2 className="size-4" />
+              {project.status === "valide" ? "Validé" : "À contrôler"}
             </span>
             <div className="flex gap-2">
               <button
@@ -134,12 +166,21 @@ function ProjectPreviewPage() {
               </button>
               <button
                 type="button"
-                disabled
-                title="Publication disponible après validation humaine"
-                className="label-mono flex cursor-not-allowed items-center gap-2 rounded-md bg-neon px-3 py-3 text-[0.6rem] text-primary-foreground opacity-60"
+                onClick={prepareSite}
+                disabled={project.status !== "valide" || preparing}
+                title={
+                  project.status === "valide"
+                    ? "Télécharger le site prêt à héberger"
+                    : "Validez d'abord le projet depuis l'administration"
+                }
+                className="label-mono flex items-center gap-2 rounded-md bg-neon px-3 py-3 text-[0.6rem] text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <LockKeyhole className="size-4" />
-                Publier
+                {preparing ? (
+                  <LoaderCircle className="size-4 animate-spin" />
+                ) : (
+                  <PackageCheck className="size-4" />
+                )}
+                {preparing ? "Préparation…" : prepared ? "Site téléchargé" : "Préparer le site"}
               </button>
             </div>
           </>
