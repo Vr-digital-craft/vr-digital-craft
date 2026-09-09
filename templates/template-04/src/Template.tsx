@@ -1,6 +1,6 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowRight, Clock3, Mail, MapPin, Menu, Phone, Sparkles, Star } from "lucide-react";
-import type { SiteConfig } from "../../../packages/template-core/src";
+import { getDirectionsUrl, type SiteConfig } from "../../../packages/template-core/src";
 import "./styles.css";
 
 export function BeautyTemplate({ config }: { config: SiteConfig }) {
@@ -12,7 +12,7 @@ export function BeautyTemplate({ config }: { config: SiteConfig }) {
   const tel = `tel:${config.business.phone.replace(/\s/g, "")}`;
   const locationLabel = `${config.business.address}, ${config.business.city}`;
   const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(locationLabel)}&output=embed`;
-  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationLabel)}`;
+  const directionsUrl = getDirectionsUrl(config.socialLinks.google, locationLabel);
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "BeautySalon",
@@ -200,7 +200,7 @@ export function BeautyTemplate({ config }: { config: SiteConfig }) {
             </a>
           </div>
           <address>
-            <div>
+            <a href={directionsUrl} target="_blank" rel="noreferrer">
               <MapPin />
               <span>
                 <small>{config.content.contact.addressLabel}</small>
@@ -208,7 +208,7 @@ export function BeautyTemplate({ config }: { config: SiteConfig }) {
                   {config.business.address}, {config.business.city}
                 </strong>
               </span>
-            </div>
+            </a>
             <div>
               <Clock3 />
               <span>

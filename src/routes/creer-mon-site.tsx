@@ -343,11 +343,11 @@ function CreateSitePage() {
                         placeholder="https://..."
                       />
                       <Field
-                        label="Fiche Google"
+                        label="Lien Google Maps"
                         name="google"
                         defaultValue={formDefaults?.socialLinks.google}
                         type="url"
-                        placeholder="https://..."
+                        placeholder="https://maps.app.goo.gl/..."
                       />
                     </div>
                   </FormSection>
