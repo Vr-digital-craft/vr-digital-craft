@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
@@ -45,17 +46,26 @@ export function Pricing() {
                 </li>
               ))}
             </ul>
-            <a
-              href="#contact"
-              className={cn(
-                "label-mono mt-10 flex items-center justify-center rounded-md px-5 py-4 text-[0.7rem] transition-all duration-300",
-                p.featured
-                  ? "bg-neon text-primary-foreground hover:shadow-[var(--shadow-neon-strong)]"
-                  : "border border-border hover:border-neon hover:text-neon",
-              )}
-            >
-              {p.cta}
-            </a>
+            {p.id === "essentiel" ? (
+              <Link
+                to="/modeles"
+                className="label-mono mt-10 flex items-center justify-center rounded-md border border-border px-5 py-4 text-[0.7rem] transition-all duration-300 hover:border-neon hover:text-neon"
+              >
+                {p.cta}
+              </Link>
+            ) : (
+              <a
+                href="#contact"
+                className={cn(
+                  "label-mono mt-10 flex items-center justify-center rounded-md px-5 py-4 text-[0.7rem] transition-all duration-300",
+                  p.featured
+                    ? "bg-neon text-primary-foreground hover:shadow-[var(--shadow-neon-strong)]"
+                    : "border border-border hover:border-neon hover:text-neon",
+                )}
+              >
+                {p.cta}
+              </a>
+            )}
           </Reveal>
         ))}
       </div>
