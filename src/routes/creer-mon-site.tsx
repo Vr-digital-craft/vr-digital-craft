@@ -14,10 +14,7 @@ import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
 import { getAdminSession } from "@/modules/admin/admin-auth.functions";
 import { generateSiteCopy } from "@/modules/ai/generate-site-copy.functions";
-import {
-  applyGeneratedCopy,
-  applyGeneratedCopyPreservingStructuredFacts,
-} from "@/modules/ai/site-copy";
+import { applyGeneratedCopyPreservingStructuredFacts } from "@/modules/ai/site-copy";
 import { createClientBriefDraft, type ClientBriefDraft } from "@/modules/projects/client-brief";
 import { generateProject, type ProjectAssets } from "@/modules/projects/generated-project";
 import { getLocalProject, saveLocalProject } from "@/modules/projects/browser-project-store";
@@ -86,6 +83,7 @@ function CreateSitePage() {
   const [assets, setAssets] = useState<ProjectAssets>({ logo: null, photos: [] });
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState("");
+  const [generationSuccess, setGenerationSuccess] = useState("");
   const [creationMode, setCreationMode] = useState<AdminCreationMode>("form");
   const [adminPrompt, setAdminPrompt] = useState("");
 
@@ -137,6 +135,7 @@ function CreateSitePage() {
     if (!draft || !selectedTemplate) return;
     setGenerating(true);
     setGenerationError("");
+    setGenerationSuccess("");
     try {
       const runtimeTemplate = runtimeTemplates[selectedTemplate.id];
       if (!runtimeTemplate) throw new Error("Modèle indisponible");
@@ -177,6 +176,7 @@ function CreateSitePage() {
     }
     setGenerating(true);
     setGenerationError("");
+    setGenerationSuccess("");
     try {
       const runtimeTemplate = runtimeTemplates[selectedTemplate.id];
       if (!runtimeTemplate) throw new Error("Modèle indisponible");
@@ -240,19 +240,19 @@ function CreateSitePage() {
       );
       const promptDraft: ClientBriefDraft = {
         templateId: selectedTemplate.id,
-        companyName: facts.name || "Nouvelle démo",
+        companyName: facts.name,
         tagline: facts.tagline,
-        activity: facts.activity || "Activité à préciser",
+        activity: facts.activity,
         description: facts.description || result.copy.aboutDescription,
         companyStory: result.copy.aboutDescription,
         phone: facts.phone,
         email: facts.email,
         address: facts.address,
-        city: facts.city || "Ville à préciser",
+        city: facts.city,
         openingHours: facts.openingHours,
         services: explicitServices.length
           ? explicitServices.map((service) => `${service.title} | ${service.description}`)
-          : ["Services à préciser | Complétez les prestations depuis l'administration."],
+          : [],
         socialLinks: { facebook: "", instagram: "", google: "" },
         colors: {
           primary: runtimeTemplate.config.branding.primaryColor,
@@ -261,22 +261,17 @@ function CreateSitePage() {
         logoName: "",
         photoNames: [],
       };
-      let project = generateProject(promptDraft, runtimeTemplate.config, selectedTemplate.version);
-      project = {
-        ...project,
-        config: applyGeneratedCopy(project.config, result.copy),
-        lastAiProvider: result.provider,
-        lastAiModel: result.model,
-      };
-      project.config.content.services.eyebrow = "Services";
-      project.config.content.services.title = "Nos prestations";
-      project.config.content.services.description =
-        "Découvrez les prestations indiquées pour cette activité.";
-      project.config.content.gallery.enabled = false;
-      project.config.content.testimonials.enabled = false;
       localStorage.setItem(`vr-digital:brief:${selectedTemplate.id}`, JSON.stringify(promptDraft));
-      await saveLocalProject(project, { logo: null, photos: [] });
-      window.location.assign(`/apercu/${project.id}`);
+      setFormDefaults(promptDraft);
+      setLogoName("");
+      setPhotoNames([]);
+      setAssets({ logo: null, photos: [] });
+      setCreationMode("combined");
+      setGenerationSuccess(
+        `Les champs ont été préremplis avec ${result.provider === "cloudflare" ? "Cloudflare AI" : "OpenAI"}. Vérifiez et complétez les informations avant de continuer.`,
+      );
+      setGenerating(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       setGenerationError(
         error instanceof Error
@@ -395,6 +390,7 @@ function CreateSitePage() {
                             setDraft(null);
                             setErrors([]);
                             setGenerationError("");
+                            setGenerationSuccess("");
                           }}
                           className={`label-mono rounded-md px-4 py-3 text-xs transition-colors ${
                             creationMode === value
@@ -408,6 +404,16 @@ function CreateSitePage() {
                     </div>
                   </div>
                 </section>
+              )}
+
+              {generationSuccess && (
+                <p
+                  role="status"
+                  className="mt-8 rounded-lg border border-neon/40 bg-neon/10 p-5 text-sm leading-relaxed text-foreground"
+                >
+                  <CheckCircle2 className="mr-2 inline size-4 text-neon" />
+                  {generationSuccess}
+                </p>
               )}
 
               {creationMode === "prompt" && isAdmin ? (
@@ -445,7 +451,9 @@ function CreateSitePage() {
                       className="group label-mono mt-8 flex w-full items-center justify-center gap-3 rounded-md bg-neon px-6 py-5 text-xs text-primary-foreground transition-shadow hover:shadow-[var(--shadow-neon-strong)] disabled:cursor-wait disabled:opacity-60"
                     >
                       <Sparkles className="size-4" />
-                      {generating ? "Génération avec l'IA…" : "Générer la démonstration"}
+                      {generating
+                        ? "Préremplissage avec l'IA…"
+                        : "Préremplir le formulaire avec l'IA"}
                     </button>
                   </div>
                   <TemplateAside selectedTemplate={selectedTemplate} sendsToAi />
