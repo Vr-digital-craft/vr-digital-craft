@@ -169,7 +169,6 @@ export const siteContent: SiteContent = {
       price: "À partir de 490 €",
       features: [
         "Modèle professionnel personnalisé",
-        "Jusqu'à 5 pages",
         "Responsive",
         "Prise de contact",
         "Mise en ligne",
