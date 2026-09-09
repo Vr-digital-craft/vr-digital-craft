@@ -17,7 +17,7 @@ import type { SiteContent } from "@/lib/site-content-types";
 
 const fallbackTitle = "Création Site Internet Toulouse | VR Digital";
 const fallbackDescription =
-  "Création de sites internet modernes pour artisans, restaurants, commerçants et entreprises. Sites vitrines, refonte et solutions web sur mesure.";
+  "VR Digital crée des sites internet modernes, rapides et personnalisés pour artisans, commerçants, restaurants, indépendants et entreprises.";
 
 export const Route = createFileRoute("/")({
   loader: () => getSiteContent(),

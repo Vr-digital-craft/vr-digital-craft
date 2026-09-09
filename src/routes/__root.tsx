@@ -75,7 +75,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Création de sites internet modernes pour artisans, restaurants, commerçants et entreprises.",
+          "VR Digital crée des sites internet modernes, rapides et personnalisés pour artisans, commerçants, restaurants, indépendants et entreprises.",
       },
       { name: "author", content: "VR Digital" },
       { name: "theme-color", content: "#000000" },

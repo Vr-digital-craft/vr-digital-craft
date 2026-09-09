@@ -15,6 +15,27 @@ export function Why() {
           title={t("why_title", "Un site pensé pour votre activité.")}
         />
 
+        <div className="text-muted-foreground mt-10 max-w-4xl space-y-5 text-base leading-relaxed sm:mt-14 sm:text-lg">
+          <p>
+            {t(
+              "why_description_1",
+              "VR Digital accompagne les professionnels dans la création de leur présence en ligne.",
+            )}
+          </p>
+          <p>
+            {t(
+              "why_description_2",
+              "Je conçois des sites internet modernes, rapides et adaptés à chaque activité : artisans, commerçants, restaurants, indépendants et entreprises.",
+            )}
+          </p>
+          <p>
+            {t(
+              "why_description_3",
+              "Choisissez parmi nos modèles professionnels ou optez pour une création entièrement personnalisée. Design, contenus, référencement local et mise en ligne : votre site est pensé pour mettre en valeur votre activité et faciliter la prise de contact avec vos futurs clients.",
+            )}
+          </p>
+        </div>
+
         <ul className="mt-14 grid gap-x-8 gap-y-5 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
           {whyPoints.map((p, i) => (
             <Reveal as="li" key={p.id} delay={i * 60} className="flex items-center gap-3">
