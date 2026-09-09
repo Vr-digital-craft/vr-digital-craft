@@ -19,7 +19,10 @@ export const siteContent: SiteContent = {
     "testimonials",
     "contact",
     "faq",
-  ].map((key) => ({ key, visible: key !== "work" && key !== "testimonials" })),
+  ].map((key) => ({
+    key,
+    visible: key !== "work" && key !== "before_after" && key !== "testimonials",
+  })),
   services: [
     {
       id: "sites-vitrines",
