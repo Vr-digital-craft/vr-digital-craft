@@ -11,11 +11,15 @@ import {
   Globe2,
   LoaderCircle,
   RotateCcw,
+  LockKeyhole,
+  LogOut,
 } from "lucide-react";
+import { getAdminSession, loginAdmin, logoutAdmin } from "@/modules/admin/admin-auth.functions";
 import { getAllLocalProjects, updateLocalProject } from "@/modules/projects/browser-project-store";
 import type { GeneratedProject, ProjectStatus } from "@/modules/projects/generated-project";
 
 export const Route = createFileRoute("/admin")({
+  loader: () => getAdminSession(),
   head: () => ({
     meta: [
       { title: "Administration locale | VR Digital" },
@@ -38,6 +42,88 @@ const statusLabels: Record<ProjectStatus, string> = {
 type Filter = "actifs" | "a_controler" | "valides" | "publies" | "archives";
 
 function AdminPage() {
+  const adminSession = Route.useLoaderData();
+
+  if (!adminSession.authenticated) {
+    return <AdminLogin configured={adminSession.configured} />;
+  }
+
+  return <AdminDashboard />;
+}
+
+function AdminLogin({ configured }: { configured: boolean }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setError("");
+    try {
+      const result = await loginAdmin({ data: { password } });
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+      window.location.reload();
+    } catch {
+      setError("Connexion impossible pour le moment.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10 text-foreground">
+      <section className="w-full max-w-md rounded-xl border border-border bg-card p-7 shadow-2xl sm:p-9">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-neon text-primary-foreground">
+          <LockKeyhole className="size-6" />
+        </div>
+        <p className="eyebrow mt-7">Espace privé VR Digital</p>
+        <h1 className="font-display mt-3 text-4xl font-bold">Administration</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          Saisissez votre mot de passe pour accéder aux projets clients.
+        </p>
+
+        <form onSubmit={submit} className="mt-7 space-y-4">
+          <div>
+            <label htmlFor="admin-password" className="label-mono text-xs text-muted-foreground">
+              Mot de passe
+            </label>
+            <input
+              id="admin-password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              autoFocus
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-3.5 outline-none transition-colors focus:border-neon"
+            />
+          </div>
+          {(!configured || error) && (
+            <p role="alert" className="text-sm text-red-300">
+              {error || "La protection doit être configurée avant la mise en ligne."}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={submitting || !configured}
+            className="label-mono flex w-full items-center justify-center rounded-md bg-neon px-4 py-4 text-xs text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {submitting ? "CONNEXION…" : "SE CONNECTER"}
+          </button>
+        </form>
+        <a href="/" className="mt-6 block text-center text-sm text-muted-foreground hover:text-foreground">
+          Retour au site
+        </a>
+      </section>
+    </main>
+  );
+}
+
+function AdminDashboard() {
   const [projects, setProjects] = useState<GeneratedProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -87,12 +173,24 @@ function AdminPage() {
           <p className="eyebrow">Espace de travail local</p>
           <h1 className="font-display mt-3 text-4xl font-bold sm:text-6xl">Administration</h1>
         </div>
-        <a
-          href="/modeles"
-          className="label-mono flex items-center gap-2 rounded-md border border-border px-4 py-3 text-xs hover:border-neon"
-        >
-          <ArrowLeft className="size-4" /> Retour au site
-        </a>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="/modeles"
+            className="label-mono flex items-center gap-2 rounded-md border border-border px-4 py-3 text-xs hover:border-neon"
+          >
+            <ArrowLeft className="size-4" /> Retour au site
+          </a>
+          <button
+            type="button"
+            onClick={async () => {
+              await logoutAdmin();
+              window.location.reload();
+            }}
+            className="label-mono flex items-center gap-2 rounded-md border border-border px-4 py-3 text-xs text-muted-foreground hover:border-neon hover:text-foreground"
+          >
+            <LogOut className="size-4" /> Déconnexion
+          </button>
+        </div>
       </header>
 
       <div className="mx-auto mt-8 grid max-w-7xl gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
@@ -134,8 +232,8 @@ function AdminPage() {
             onClick={() => setFilter("archives")}
           />
           <div className="mt-6 rounded-lg border border-border bg-card p-4 text-sm leading-relaxed text-muted-foreground">
-            Les projets sont enregistrés uniquement dans ce navigateur. La protection par compte
-            sera ajoutée avec le futur stockage en ligne.
+            Les projets sont enregistrés uniquement dans ce navigateur. Votre session privée expire
+            automatiquement après 8 heures.
           </div>
         </aside>
 
