@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, Download, LoaderCircle, LockKeyhole } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Download, LoaderCircle, LockKeyhole, Send } from "lucide-react";
 import type { SiteConfig } from "../../packages/template-core/src";
 import { runtimeTemplates } from "../../templates/runtime";
 import { applyLocalAssets, type GeneratedProject } from "@/modules/projects/generated-project";
-import { getLocalProject } from "@/modules/projects/browser-project-store";
+import { getAdminSession } from "@/modules/admin/admin-auth.functions";
+import { getLocalProject, updateLocalProject } from "@/modules/projects/browser-project-store";
 
 export const Route = createFileRoute("/apercu/$projectId")({
+  loader: () => getAdminSession(),
   head: () => ({
     meta: [
       { title: "Prévisualisation du site | VR Digital" },
@@ -17,10 +19,14 @@ export const Route = createFileRoute("/apercu/$projectId")({
 });
 
 function ProjectPreviewPage() {
+  const adminSession = Route.useLoaderData();
+  const isAdmin = adminSession.authenticated && adminSession.role === "admin";
   const { projectId } = Route.useParams();
   const [project, setProject] = useState<GeneratedProject | null>(null);
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     let dispose = () => {};
@@ -54,6 +60,36 @@ function ProjectPreviewPage() {
     URL.revokeObjectURL(url);
   }
 
+  async function sendForReview() {
+    if (!project || sending) return;
+    setSending(true);
+    const submittedProject = { ...project, status: "informations_recues" as const };
+    try {
+      await updateLocalProject(submittedProject);
+      setProject(submittedProject);
+      setSent(true);
+      const subject = `Projet à valider — ${project.config.business.name}`;
+      const body = [
+        "Bonjour VR Digital,",
+        "",
+        "Je souhaite vous transmettre ce projet pour validation.",
+        "",
+        `Entreprise : ${project.config.business.name}`,
+        `Activité : ${project.config.business.activity}`,
+        `Ville : ${project.config.business.city}`,
+        `Modèle : ${project.templateId}`,
+        `Référence du projet : ${project.id}`,
+        "",
+        "Merci de me recontacter pour la suite.",
+      ].join("\n");
+      window.location.href = `mailto:vrdigital.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    } catch {
+      setError("Le projet n'a pas pu être préparé pour validation.");
+    } finally {
+      setSending(false);
+    }
+  }
+
   if (error) return <PreviewMessage title="Prévisualisation indisponible" description={error} />;
   if (!project || !config)
     return (
@@ -82,28 +118,42 @@ function ProjectPreviewPage() {
           <ArrowLeft className="size-4" />
           Modifier
         </a>
-        <span className="label-mono flex items-center gap-2 text-[0.6rem] text-neon">
-          <CheckCircle2 className="size-4" />À contrôler
-        </span>
-        <div className="flex gap-2">
+        {isAdmin ? (
+          <>
+            <span className="label-mono flex items-center gap-2 text-[0.6rem] text-neon">
+              <CheckCircle2 className="size-4" />À contrôler
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={downloadConfig}
+                className="label-mono flex items-center gap-2 rounded-md border border-white/20 px-3 py-3 text-[0.6rem] hover:border-neon"
+              >
+                <Download className="size-4" />
+                Configuration
+              </button>
+              <button
+                type="button"
+                disabled
+                title="Publication disponible après validation humaine"
+                className="label-mono flex cursor-not-allowed items-center gap-2 rounded-md bg-neon px-3 py-3 text-[0.6rem] text-primary-foreground opacity-60"
+              >
+                <LockKeyhole className="size-4" />
+                Publier
+              </button>
+            </div>
+          </>
+        ) : (
           <button
             type="button"
-            onClick={downloadConfig}
-            className="label-mono flex items-center gap-2 rounded-md border border-white/20 px-3 py-3 text-[0.6rem] hover:border-neon"
+            onClick={sendForReview}
+            disabled={sending || sent}
+            className="label-mono flex items-center gap-2 rounded-md bg-neon px-4 py-3 text-[0.6rem] text-primary-foreground disabled:opacity-70"
           >
-            <Download className="size-4" />
-            Configuration
+            {sent ? <CheckCircle2 className="size-4" /> : <Send className="size-4" />}
+            {sending ? "Préparation…" : sent ? "E-mail préparé" : "Envoyer pour validation"}
           </button>
-          <button
-            type="button"
-            disabled
-            title="Publication disponible après validation humaine"
-            className="label-mono flex cursor-not-allowed items-center gap-2 rounded-md bg-neon px-3 py-3 text-[0.6rem] text-primary-foreground opacity-60"
-          >
-            <LockKeyhole className="size-4" />
-            Publier
-          </button>
-        </div>
+        )}
       </div>
       <Template config={config} />
     </div>
