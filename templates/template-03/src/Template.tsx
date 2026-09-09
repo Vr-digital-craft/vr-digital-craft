@@ -122,15 +122,10 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
         </section>
 
         <section className="garage-trust" aria-label="Prestations principales">
-          {[
-            "Toutes marques",
-            "Devis avant intervention",
-            "Diagnostic précis",
-            "Suivi transparent",
-          ].map((label) => (
-            <span key={label}>
+          {config.content.services.items.slice(0, 4).map((service) => (
+            <span key={service.id}>
               <Check />
-              {label}
+              {service.title}
             </span>
           ))}
         </section>
@@ -298,11 +293,10 @@ export function GarageTemplate({ config }: { config: SiteConfig }) {
               </label>
               <label>
                 Prestation
-                <select name="service" defaultValue="Entretien et révision">
-                  <option>Entretien et révision</option>
-                  <option>Diagnostic électronique</option>
-                  <option>Freinage</option>
-                  <option>Pneumatiques</option>
+                <select name="service" defaultValue={config.content.services.items[0]?.title}>
+                  {config.content.services.items.map((service) => (
+                    <option key={service.id}>{service.title}</option>
+                  ))}
                   <option>Autre demande</option>
                 </select>
               </label>

@@ -1,6 +1,6 @@
 import { useSession } from "@tanstack/react-start/server";
 
-type AdminSession = { authenticated?: boolean };
+type AdminSession = { authenticated?: boolean; role?: "admin" };
 
 export async function requireAdminSession() {
   const password = process.env["ADMIN_SESSION_SECRET"];
@@ -22,7 +22,7 @@ export async function requireAdminSession() {
     },
   });
 
-  if (session.data.authenticated !== true) {
+  if (session.data.authenticated !== true || session.data.role !== "admin") {
     throw new Error(
       "Votre session d'administration a expiré. Reconnectez-vous pour utiliser l'IA.",
     );

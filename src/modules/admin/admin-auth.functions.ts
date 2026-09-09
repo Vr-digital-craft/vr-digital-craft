@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { useSession } from "@tanstack/react-start/server";
 
-type AdminSession = { authenticated?: boolean };
+type AdminSession = { authenticated?: boolean; role?: "admin" };
 
 function getSessionConfig() {
   const password = process.env["ADMIN_SESSION_SECRET"];
@@ -42,9 +42,13 @@ async function matchesPassword(candidate: string, expected: string) {
 export const getAdminSession = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const session = await useSession<AdminSession>(getSessionConfig());
-    return { authenticated: session.data.authenticated === true, configured: true };
+    const authenticated = session.data.authenticated === true;
+    if (authenticated && session.data.role !== "admin") {
+      await session.update({ ...session.data, role: "admin" });
+    }
+    return { authenticated, role: authenticated ? ("admin" as const) : null, configured: true };
   } catch {
-    return { authenticated: false, configured: false };
+    return { authenticated: false, role: null, configured: false };
   }
 });
 
@@ -65,7 +69,7 @@ export const loginAdmin = createServerFn({ method: "POST" })
     }
 
     const session = await useSession<AdminSession>(getSessionConfig());
-    await session.update({ authenticated: true });
+    await session.update({ authenticated: true, role: "admin" });
     return { success: true, error: "" };
   });
 

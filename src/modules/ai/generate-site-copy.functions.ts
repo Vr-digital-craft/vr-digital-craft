@@ -8,6 +8,8 @@ export type GenerateInput = {
   templateId?: string;
   interventionArea?: string;
   tone?: string;
+  adminPrompt?: string;
+  mode?: "structured" | "prompt" | "combined";
 };
 
 function validateInput(value: unknown): GenerateInput {
@@ -15,7 +17,11 @@ function validateInput(value: unknown): GenerateInput {
     throw new Error("Configuration du site invalide.");
   }
   const input = value as GenerateInput;
-  if (!input.config.business?.name || !input.config.business?.activity) {
+  if (input.mode === "prompt") {
+    if (!input.adminPrompt || input.adminPrompt.trim().length < 20) {
+      throw new Error("Décrivez le site à générer avec au moins 20 caractères.");
+    }
+  } else if (!input.config.business?.name || !input.config.business?.activity) {
     throw new Error("Le nom et l'activité de l'entreprise sont nécessaires.");
   }
   return input;

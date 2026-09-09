@@ -30,6 +30,16 @@ type AiProvider = {
 function buildPrompt(input: GenerateInput) {
   const { config } = input;
   return JSON.stringify({
+    mode: input.mode || "structured",
+    reglesDePriorite: {
+      donneesStructureesPrioritaires: input.mode !== "prompt",
+      instruction:
+        input.mode === "combined"
+          ? "Les données structurées sont la source de vérité. Le prompt libre ne peut modifier aucun fait qui les contredit."
+          : input.mode === "prompt"
+            ? "Extrais uniquement les faits explicitement écrits dans le prompt libre. Laisse une chaîne vide pour toute information absente."
+            : "Recopie les faits structurés sans les modifier.",
+    },
     entreprise: {
       nom: config.business.name,
       activite: config.business.activity,
@@ -40,21 +50,29 @@ function buildPrompt(input: GenerateInput) {
     },
     modele: input.templateId || "site-vitrine",
     tonSouhaite: input.tone || "professionnel, naturel, précis et rassurant",
+    promptLibreAdmin: input.adminPrompt?.trim() || "",
     servicesFournis: config.content.services.items.map(({ title, description }) => ({
       titre: title,
       description,
     })),
-    contenuActuel: {
-      hero: config.content.hero,
-      presentation: config.content.about,
-      contact: config.content.contact,
-      seo: config.seo,
-    },
+    contenuActuel:
+      input.mode === "prompt"
+        ? null
+        : {
+            hero: config.content.hero,
+            presentation: config.content.about,
+            contact: config.content.contact,
+            seo: config.seo,
+          },
   });
 }
 
 const systemPrompt = `Tu es le rédacteur web de VR Digital. Rédige en français naturel pour un site vitrine professionnel local.
 Respecte strictement les faits fournis. N'invente jamais de certification, ancienneté, avis, garantie, tarif, adresse, prestation ou résultat.
+Dans businessFacts, recopie les données structurées lorsqu'elles existent. En mode prompt, extrais uniquement les faits explicitement présents dans le prompt et laisse les autres champs vides.
+En mode combiné, les données structurées priment toujours sur le prompt libre, même si celui-ci les contredit.
+En mode prompt, chaque prestation explicitement citée dans le prompt est autorisée : crée un service distinct pour chacune et rédige sa description sans ajouter de fait. Les textes marketing peuvent reformuler les éléments fournis, mais ne doivent jamais ajouter une information factuelle.
+N'ajoute pas de promesse implicite telle que « toutes marques », « équipe expérimentée », « diagnostic précis », « devis avant intervention » ou « délai respecté » si ces termes ne figurent pas dans les données reçues.
 Évite les formules génériques, les répétitions et le bourrage de mots-clés. Localise sobrement le SEO selon l'activité, la ville et la zone d'intervention.
 Les appels à l'action doivent être courts et adaptés à l'activité. Les FAQ doivent uniquement répondre à partir des informations fournies.
 Retourne exclusivement un objet conforme au schéma JSON demandé.`;

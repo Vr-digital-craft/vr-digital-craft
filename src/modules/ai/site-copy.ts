@@ -3,6 +3,17 @@ import type { SiteConfig } from "../../../packages/template-core/src";
 export type AiProviderName = "cloudflare" | "openai";
 
 export type GeneratedSiteCopy = {
+  businessFacts: {
+    name: string;
+    tagline: string;
+    activity: string;
+    description: string;
+    phone: string;
+    email: string;
+    address: string;
+    city: string;
+    openingHours: string;
+  };
   heroTitle: string;
   heroSubtitle: string;
   aboutTitle: string;
@@ -21,6 +32,32 @@ export const generatedCopySchema = {
   type: "object",
   additionalProperties: false,
   properties: {
+    businessFacts: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: { type: "string" },
+        tagline: { type: "string" },
+        activity: { type: "string" },
+        description: { type: "string" },
+        phone: { type: "string" },
+        email: { type: "string" },
+        address: { type: "string" },
+        city: { type: "string" },
+        openingHours: { type: "string" },
+      },
+      required: [
+        "name",
+        "tagline",
+        "activity",
+        "description",
+        "phone",
+        "email",
+        "address",
+        "city",
+        "openingHours",
+      ],
+    },
     heroTitle: { type: "string" },
     heroSubtitle: { type: "string" },
     aboutTitle: { type: "string" },
@@ -36,7 +73,10 @@ export const generatedCopySchema = {
       items: {
         type: "object",
         additionalProperties: false,
-        properties: { title: { type: "string" }, description: { type: "string" } },
+        properties: {
+          title: { type: "string", minLength: 1 },
+          description: { type: "string", minLength: 1 },
+        },
         required: ["title", "description"],
       },
     },
@@ -54,6 +94,7 @@ export const generatedCopySchema = {
     seoDescription: { type: "string" },
   },
   required: [
+    "businessFacts",
     "heroTitle",
     "heroSubtitle",
     "aboutTitle",
@@ -90,6 +131,10 @@ export function parseAndSanitizeGeneratedCopy(raw: unknown, config: SiteConfig):
   }
   if (!value || typeof value !== "object") throw new Error("La réponse IA est invalide.");
   const candidate = value as Record<string, unknown>;
+  const rawBusinessFacts =
+    candidate["businessFacts"] && typeof candidate["businessFacts"] === "object"
+      ? (candidate["businessFacts"] as Record<string, unknown>)
+      : {};
   const services = Array.isArray(candidate["services"])
     ? candidate["services"].slice(0, 8).flatMap((item, index) => {
         if (!item || typeof item !== "object") return [];
@@ -112,6 +157,21 @@ export function parseAndSanitizeGeneratedCopy(raw: unknown, config: SiteConfig):
     : [];
 
   return {
+    businessFacts: {
+      name: clean(rawBusinessFacts["name"], config.business.name, 100),
+      tagline: clean(rawBusinessFacts["tagline"], config.business.tagline, 140),
+      activity: clean(rawBusinessFacts["activity"], config.business.activity, 100),
+      description: clean(rawBusinessFacts["description"], config.business.description, 600),
+      phone: clean(rawBusinessFacts["phone"], config.business.phone, 40),
+      email: clean(rawBusinessFacts["email"], config.business.email, 160),
+      address: clean(rawBusinessFacts["address"], config.business.address, 200),
+      city: clean(rawBusinessFacts["city"], config.business.city, 100),
+      openingHours: clean(
+        rawBusinessFacts["openingHours"],
+        config.business.openingHours.join(" · "),
+        200,
+      ),
+    },
     heroTitle: clean(candidate["heroTitle"], config.content.hero.title, 120),
     heroSubtitle: clean(candidate["heroSubtitle"], config.content.hero.subtitle, 280),
     aboutTitle: clean(candidate["aboutTitle"], config.content.about.title, 120),
@@ -152,5 +212,16 @@ export function applyGeneratedCopy(config: SiteConfig, copy: GeneratedSiteCopy):
   }
   next.seo.title = copy.seoTitle;
   next.seo.description = copy.seoDescription;
+  return next;
+}
+
+export function applyGeneratedCopyPreservingStructuredFacts(
+  config: SiteConfig,
+  copy: GeneratedSiteCopy,
+): SiteConfig {
+  const next = applyGeneratedCopy(config, copy);
+  next.business = structuredClone(config.business);
+  next.socialLinks = structuredClone(config.socialLinks);
+  next.content.services.items = structuredClone(config.content.services.items);
   return next;
 }

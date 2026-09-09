@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, CheckCircle2, ImagePlus, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  ImagePlus,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { Header } from "@/components/site/Header";
 import { SiteContentProvider } from "@/components/site/content";
 import { getSiteContent } from "@/lib/site-content.functions";
+import { getAdminSession } from "@/modules/admin/admin-auth.functions";
+import { generateSiteCopy } from "@/modules/ai/generate-site-copy.functions";
+import {
+  applyGeneratedCopy,
+  applyGeneratedCopyPreservingStructuredFacts,
+} from "@/modules/ai/site-copy";
 import { createClientBriefDraft, type ClientBriefDraft } from "@/modules/projects/client-brief";
 import { generateProject, type ProjectAssets } from "@/modules/projects/generated-project";
 import { getLocalProject, saveLocalProject } from "@/modules/projects/browser-project-store";
@@ -18,7 +31,10 @@ export const Route = createFileRoute("/creer-mon-site")({
     template: typeof search["template"] === "string" ? search["template"] : "",
     project: typeof search["project"] === "string" ? search["project"] : "",
   }),
-  loader: () => getSiteContent(),
+  loader: async () => {
+    const [content, adminSession] = await Promise.all([getSiteContent(), getAdminSession()]);
+    return { content, adminSession };
+  },
   head: () => ({
     meta: [
       { title: "Créer mon site | VR Digital" },
@@ -32,9 +48,11 @@ export const Route = createFileRoute("/creer-mon-site")({
 const fieldClass =
   "mt-2 w-full rounded-md border border-border bg-background px-4 py-3.5 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-neon";
 const labelClass = "label-mono text-muted-foreground text-[0.65rem]";
+type AdminCreationMode = "form" | "prompt" | "combined";
 
 function CreateSitePage() {
-  const content = Route.useLoaderData();
+  const { content, adminSession } = Route.useLoaderData();
+  const isAdmin = adminSession.authenticated && adminSession.role === "admin";
   const { template: templateId, project: projectId } = Route.useSearch();
   const selectedTemplate = templateRegistry.find(
     (template) => template.id === templateId && template.enabled,
@@ -68,6 +86,8 @@ function CreateSitePage() {
   const [assets, setAssets] = useState<ProjectAssets>({ logo: null, photos: [] });
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState("");
+  const [creationMode, setCreationMode] = useState<AdminCreationMode>("form");
+  const [adminPrompt, setAdminPrompt] = useState("");
 
   useEffect(() => {
     if (!selectedTemplate) return;
@@ -120,11 +140,149 @@ function CreateSitePage() {
     try {
       const runtimeTemplate = runtimeTemplates[selectedTemplate.id];
       if (!runtimeTemplate) throw new Error("Modèle indisponible");
-      const project = generateProject(draft, runtimeTemplate.config, selectedTemplate.version);
+      let project = generateProject(draft, runtimeTemplate.config, selectedTemplate.version);
+      if (isAdmin && creationMode === "combined" && adminPrompt.trim()) {
+        const result = await generateSiteCopy({
+          data: {
+            config: project.config,
+            templateId: selectedTemplate.id,
+            adminPrompt,
+            mode: "combined",
+          },
+        });
+        const generatedConfig = applyGeneratedCopyPreservingStructuredFacts(
+          project.config,
+          result.copy,
+        );
+        project = {
+          ...project,
+          config: generatedConfig,
+          lastAiProvider: result.provider,
+          lastAiModel: result.model,
+        };
+      }
       await saveLocalProject(project, assets);
       window.location.assign(`/apercu/${project.id}`);
     } catch {
       setGenerationError("La prévisualisation n'a pas pu être enregistrée dans ce navigateur.");
+      setGenerating(false);
+    }
+  }
+
+  async function handlePromptGenerate(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!isAdmin || !selectedTemplate || adminPrompt.trim().length < 20) {
+      setGenerationError("Décrivez le site à générer avec au moins 20 caractères.");
+      return;
+    }
+    setGenerating(true);
+    setGenerationError("");
+    try {
+      const runtimeTemplate = runtimeTemplates[selectedTemplate.id];
+      if (!runtimeTemplate) throw new Error("Modèle indisponible");
+      const promptConfig = structuredClone(runtimeTemplate.config);
+      promptConfig.business = {
+        name: "",
+        tagline: "",
+        activity: "",
+        description: "",
+        phone: "",
+        email: "",
+        address: "",
+        city: "",
+        openingHours: [],
+      };
+      promptConfig.content.hero.title = "";
+      promptConfig.content.hero.subtitle = "";
+      promptConfig.content.services.eyebrow = "Services";
+      promptConfig.content.services.title = "Prestations";
+      promptConfig.content.services.description = "";
+      promptConfig.content.services.items = [];
+      promptConfig.content.about.title = "";
+      promptConfig.content.about.description = "";
+      promptConfig.content.contact.title = "";
+      promptConfig.content.contact.description = "";
+      promptConfig.content.footer.tagline = "";
+      promptConfig.seo.title = "";
+      promptConfig.seo.description = "";
+      const result = await generateSiteCopy({
+        data: {
+          config: promptConfig,
+          templateId: selectedTemplate.id,
+          adminPrompt,
+          mode: "prompt",
+        },
+      });
+      const rawFacts = result.copy.businessFacts;
+      const normalizedPrompt = adminPrompt.toLocaleLowerCase("fr-FR").replace(/\s+/g, " ");
+      const explicit = (value: string) => {
+        if (!value) return "";
+        const normalizedValue = value.toLocaleLowerCase("fr-FR").replace(/\s+/g, " ");
+        if (normalizedPrompt.includes(normalizedValue)) return value;
+        const meaningfulWords = normalizedValue.match(/[\p{L}\p{N}]{4,}/gu) ?? [];
+        return meaningfulWords.length > 0 &&
+          meaningfulWords.every((word) => normalizedPrompt.includes(word))
+          ? value
+          : "";
+      };
+      const facts = {
+        ...rawFacts,
+        name: explicit(rawFacts.name),
+        activity: explicit(rawFacts.activity),
+        phone: explicit(rawFacts.phone),
+        email: explicit(rawFacts.email),
+        address: explicit(rawFacts.address),
+        city: explicit(rawFacts.city),
+        openingHours: explicit(rawFacts.openingHours),
+      };
+      const explicitServices = result.copy.services.filter((service) =>
+        normalizedPrompt.includes(service.title.toLocaleLowerCase("fr-FR")),
+      );
+      const promptDraft: ClientBriefDraft = {
+        templateId: selectedTemplate.id,
+        companyName: facts.name || "Nouvelle démo",
+        tagline: facts.tagline,
+        activity: facts.activity || "Activité à préciser",
+        description: facts.description || result.copy.aboutDescription,
+        companyStory: result.copy.aboutDescription,
+        phone: facts.phone,
+        email: facts.email,
+        address: facts.address,
+        city: facts.city || "Ville à préciser",
+        openingHours: facts.openingHours,
+        services: explicitServices.length
+          ? explicitServices.map((service) => `${service.title} | ${service.description}`)
+          : ["Services à préciser | Complétez les prestations depuis l'administration."],
+        socialLinks: { facebook: "", instagram: "", google: "" },
+        colors: {
+          primary: runtimeTemplate.config.branding.primaryColor,
+          secondary: runtimeTemplate.config.branding.secondaryColor,
+        },
+        logoName: "",
+        photoNames: [],
+      };
+      let project = generateProject(promptDraft, runtimeTemplate.config, selectedTemplate.version);
+      project = {
+        ...project,
+        config: applyGeneratedCopy(project.config, result.copy),
+        lastAiProvider: result.provider,
+        lastAiModel: result.model,
+      };
+      project.config.content.services.eyebrow = "Services";
+      project.config.content.services.title = "Nos prestations";
+      project.config.content.services.description =
+        "Découvrez les prestations indiquées pour cette activité.";
+      project.config.content.gallery.enabled = false;
+      project.config.content.testimonials.enabled = false;
+      localStorage.setItem(`vr-digital:brief:${selectedTemplate.id}`, JSON.stringify(promptDraft));
+      await saveLocalProject(project, { logo: null, photos: [] });
+      window.location.assign(`/apercu/${project.id}`);
+    } catch (error) {
+      setGenerationError(
+        error instanceof Error
+          ? error.message
+          : "La génération IA est indisponible. Vous pouvez continuer avec le formulaire.",
+      );
       setGenerating(false);
     }
   }
@@ -206,199 +364,325 @@ function CreateSitePage() {
                 </a>
               </section>
 
-              <form
-                onSubmit={handleSubmit}
-                className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start"
-              >
-                <div className="space-y-12">
-                  <FormSection number="01" title="Votre entreprise">
-                    <div className="grid gap-6 sm:grid-cols-2">
-                      <Field
-                        label="Nom de l'entreprise *"
-                        name="companyName"
-                        defaultValue={formDefaults?.companyName}
-                        required
-                      />
-                      <Field label="Slogan" name="tagline" defaultValue={formDefaults?.tagline} />
-                      <Field
-                        label="Activité *"
-                        name="activity"
-                        defaultValue={formDefaults?.activity}
-                        required
-                        placeholder="Ex. Maçonnerie et rénovation"
-                      />
-                      <Field
-                        label="Ville *"
-                        name="city"
-                        defaultValue={formDefaults?.city}
-                        required
-                      />
-                      <Field
-                        label="Téléphone *"
-                        name="phone"
-                        type="tel"
-                        defaultValue={formDefaults?.phone}
-                        required
-                      />
-                      <Field
-                        label="E-mail *"
-                        name="email"
-                        type="email"
-                        defaultValue={formDefaults?.email}
-                        required
-                      />
-                      <Field label="Adresse" name="address" defaultValue={formDefaults?.address} />
-                      <Field
-                        label="Horaires"
-                        name="openingHours"
-                        defaultValue={formDefaults?.openingHours}
-                        placeholder="Lun–Ven : 8h–18h"
-                      />
+              {isAdmin && (
+                <section className="mt-8 rounded-xl border border-neon/30 bg-card p-5 sm:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p className="eyebrow">Mode administrateur</p>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        Choisissez la quantité d'informations à fournir pour cette démonstration.
+                      </p>
                     </div>
-                  </FormSection>
-
-                  <FormSection number="02" title="Votre activité">
-                    <div className="grid gap-6">
-                      <TextArea
-                        label="Description de l'activité *"
-                        name="description"
-                        defaultValue={formDefaults?.description}
-                        required
-                        placeholder="Que propose votre entreprise ?"
-                      />
-                      <TextArea
-                        label="Décrivez votre entreprise en quelques phrases *"
-                        name="companyStory"
-                        defaultValue={formDefaults?.companyStory}
-                        required
-                        rows={6}
-                        placeholder="Votre histoire, vos valeurs, votre façon de travailler et ce qui vous différencie..."
-                      />
-                      <TextArea
-                        label="Prestations et services"
-                        name="services"
-                        defaultValue={formDefaults?.services.join("\n")}
-                        rows={6}
-                        placeholder={servicePlaceholder}
-                      />
-                    </div>
-                  </FormSection>
-
-                  <FormSection number="03" title="Identité visuelle">
-                    <div className="grid gap-6 sm:grid-cols-2">
-                      <ColorField
-                        label="Couleur principale"
-                        name="primaryColor"
-                        defaultValue={
-                          formDefaults?.colors.primary ||
-                          selectedTemplateConfig?.branding.primaryColor ||
-                          "#d95d25"
-                        }
-                      />
-                      <ColorField
-                        label="Couleur secondaire"
-                        name="secondaryColor"
-                        defaultValue={
-                          formDefaults?.colors.secondary ||
-                          selectedTemplateConfig?.branding.secondaryColor ||
-                          "#17324d"
-                        }
-                      />
-                      <FileField
-                        label="Logo"
-                        name="logo"
-                        value={logoName}
-                        onChange={(files) => {
-                          setLogoName(files[0]?.name ?? "");
-                          setAssets((current) => ({ ...current, logo: files[0] ?? null }));
-                        }}
-                      />
-                      <FileField
-                        label="Photos"
-                        name="photos"
-                        value={photoNames.join(", ")}
-                        multiple
-                        onChange={(files) => {
-                          setPhotoNames(files.map((file) => file.name));
-                          setAssets((current) => ({ ...current, photos: files }));
-                        }}
-                      />
-                    </div>
-                  </FormSection>
-
-                  <FormSection number="04" title="Présence en ligne">
-                    <div className="grid gap-6 sm:grid-cols-2">
-                      <Field
-                        label="Lien Facebook"
-                        name="facebook"
-                        defaultValue={formDefaults?.socialLinks.facebook}
-                        type="url"
-                        placeholder="https://..."
-                      />
-                      <Field
-                        label="Lien Instagram"
-                        name="instagram"
-                        defaultValue={formDefaults?.socialLinks.instagram}
-                        type="url"
-                        placeholder="https://..."
-                      />
-                      <Field
-                        label="Lien Google Maps"
-                        name="google"
-                        defaultValue={formDefaults?.socialLinks.google}
-                        type="url"
-                        placeholder="https://maps.app.goo.gl/..."
-                      />
-                    </div>
-                  </FormSection>
-
-                  {errors.length > 0 && (
                     <div
-                      role="alert"
-                      className="rounded-lg border border-red-400/40 bg-red-400/10 p-5 text-sm text-red-200"
+                      className="grid w-full grid-cols-1 gap-2 rounded-lg border border-border bg-background p-1.5 sm:w-auto sm:grid-cols-3"
+                      role="radiogroup"
+                      aria-label="Mode de création"
                     >
-                      <p className="font-semibold">Certaines informations sont manquantes :</p>
-                      <ul className="mt-2 list-disc space-y-1 pl-5">
-                        {errors.map((error) => (
-                          <li key={error}>{error}</li>
-                        ))}
-                      </ul>
+                      {(
+                        [
+                          ["form", "Formulaire"],
+                          ["prompt", "Prompt IA"],
+                          ["combined", "Les deux"],
+                        ] as const
+                      ).map(([value, label]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          role="radio"
+                          aria-checked={creationMode === value}
+                          onClick={() => {
+                            setCreationMode(value);
+                            setDraft(null);
+                            setErrors([]);
+                            setGenerationError("");
+                          }}
+                          className={`label-mono rounded-md px-4 py-3 text-xs transition-colors ${
+                            creationMode === value
+                              ? "bg-neon text-primary-foreground"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
-                  )}
-                  <button
-                    type="submit"
-                    className="group label-mono flex w-full items-center justify-center gap-3 rounded-md bg-neon px-6 py-5 text-xs text-primary-foreground transition-shadow hover:shadow-[var(--shadow-neon-strong)]"
-                  >
-                    Valider mes informations
-                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                  </button>
-                </div>
-
-                <aside className="sticky top-28 rounded-xl border border-border bg-card p-6">
-                  <img
-                    src={selectedTemplate.previewImage}
-                    alt=""
-                    className="aspect-[4/3] w-full rounded-md object-cover"
-                  />
-                  <p className="eyebrow mt-5">Modèle sélectionné</p>
-                  <h2 className="font-display mt-3 text-2xl font-semibold">
-                    {selectedTemplate.name}
-                  </h2>
-                  <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-                    {selectedTemplate.description}
-                  </p>
-                  <div className="mt-6 flex gap-3 border-t border-border pt-5 text-sm text-muted-foreground">
-                    <ShieldCheck className="size-5 shrink-0 text-neon" />
-                    <p>Aucune information n'est envoyée à ce stade.</p>
                   </div>
-                </aside>
-              </form>
+                </section>
+              )}
+
+              {creationMode === "prompt" && isAdmin ? (
+                <form
+                  onSubmit={handlePromptGenerate}
+                  className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start"
+                >
+                  <div>
+                    <FormSection number="01" title="Décrivez le site à générer">
+                      <TextArea
+                        label="Prompt IA *"
+                        name="adminPrompt"
+                        value={adminPrompt}
+                        onChange={setAdminPrompt}
+                        required
+                        rows={14}
+                        placeholder="Crée un site pour un garage automobile à Grenade-sur-Garonne, spécialisé dans l'entretien, le diagnostic et le freinage. Je veux un style sombre et moderne, un ton professionnel et rassurant, avec une forte mise en avant de la prise de rendez-vous."
+                      />
+                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                        L'IA utilisera uniquement les faits présents dans ce texte. Les informations
+                        absentes resteront à compléter dans la prévisualisation.
+                      </p>
+                    </FormSection>
+                    {generationError && (
+                      <p
+                        role="alert"
+                        className="mt-6 rounded-lg border border-red-400/40 bg-red-400/10 p-5 text-sm text-red-200"
+                      >
+                        {generationError}
+                      </p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={generating}
+                      className="group label-mono mt-8 flex w-full items-center justify-center gap-3 rounded-md bg-neon px-6 py-5 text-xs text-primary-foreground transition-shadow hover:shadow-[var(--shadow-neon-strong)] disabled:cursor-wait disabled:opacity-60"
+                    >
+                      <Sparkles className="size-4" />
+                      {generating ? "Génération avec l'IA…" : "Générer la démonstration"}
+                    </button>
+                  </div>
+                  <TemplateAside selectedTemplate={selectedTemplate} sendsToAi />
+                </form>
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start"
+                >
+                  <div className="space-y-12">
+                    <FormSection number="01" title="Votre entreprise">
+                      <div className="grid gap-6 sm:grid-cols-2">
+                        <Field
+                          label="Nom de l'entreprise *"
+                          name="companyName"
+                          defaultValue={formDefaults?.companyName}
+                          required
+                        />
+                        <Field label="Slogan" name="tagline" defaultValue={formDefaults?.tagline} />
+                        <Field
+                          label="Activité *"
+                          name="activity"
+                          defaultValue={formDefaults?.activity}
+                          required
+                          placeholder="Ex. Maçonnerie et rénovation"
+                        />
+                        <Field
+                          label="Ville *"
+                          name="city"
+                          defaultValue={formDefaults?.city}
+                          required
+                        />
+                        <Field
+                          label="Téléphone *"
+                          name="phone"
+                          type="tel"
+                          defaultValue={formDefaults?.phone}
+                          required
+                        />
+                        <Field
+                          label="E-mail *"
+                          name="email"
+                          type="email"
+                          defaultValue={formDefaults?.email}
+                          required
+                        />
+                        <Field
+                          label="Adresse"
+                          name="address"
+                          defaultValue={formDefaults?.address}
+                        />
+                        <Field
+                          label="Horaires"
+                          name="openingHours"
+                          defaultValue={formDefaults?.openingHours}
+                          placeholder="Lun–Ven : 8h–18h"
+                        />
+                      </div>
+                    </FormSection>
+
+                    <FormSection number="02" title="Votre activité">
+                      <div className="grid gap-6">
+                        <TextArea
+                          label="Description de l'activité *"
+                          name="description"
+                          defaultValue={formDefaults?.description}
+                          required
+                          placeholder="Que propose votre entreprise ?"
+                        />
+                        <TextArea
+                          label="Décrivez votre entreprise en quelques phrases *"
+                          name="companyStory"
+                          defaultValue={formDefaults?.companyStory}
+                          required
+                          rows={6}
+                          placeholder="Votre histoire, vos valeurs, votre façon de travailler et ce qui vous différencie..."
+                        />
+                        <TextArea
+                          label="Prestations et services"
+                          name="services"
+                          defaultValue={formDefaults?.services.join("\n")}
+                          rows={6}
+                          placeholder={servicePlaceholder}
+                        />
+                      </div>
+                    </FormSection>
+
+                    <FormSection number="03" title="Identité visuelle">
+                      <div className="grid gap-6 sm:grid-cols-2">
+                        <ColorField
+                          label="Couleur principale"
+                          name="primaryColor"
+                          defaultValue={
+                            formDefaults?.colors.primary ||
+                            selectedTemplateConfig?.branding.primaryColor ||
+                            "#d95d25"
+                          }
+                        />
+                        <ColorField
+                          label="Couleur secondaire"
+                          name="secondaryColor"
+                          defaultValue={
+                            formDefaults?.colors.secondary ||
+                            selectedTemplateConfig?.branding.secondaryColor ||
+                            "#17324d"
+                          }
+                        />
+                        <FileField
+                          label="Logo"
+                          name="logo"
+                          value={logoName}
+                          onChange={(files) => {
+                            setLogoName(files[0]?.name ?? "");
+                            setAssets((current) => ({ ...current, logo: files[0] ?? null }));
+                          }}
+                        />
+                        <FileField
+                          label="Photos"
+                          name="photos"
+                          value={photoNames.join(", ")}
+                          multiple
+                          onChange={(files) => {
+                            setPhotoNames(files.map((file) => file.name));
+                            setAssets((current) => ({ ...current, photos: files }));
+                          }}
+                        />
+                      </div>
+                    </FormSection>
+
+                    <FormSection number="04" title="Présence en ligne">
+                      <div className="grid gap-6 sm:grid-cols-2">
+                        <Field
+                          label="Lien Facebook"
+                          name="facebook"
+                          defaultValue={formDefaults?.socialLinks.facebook}
+                          type="url"
+                          placeholder="https://..."
+                        />
+                        <Field
+                          label="Lien Instagram"
+                          name="instagram"
+                          defaultValue={formDefaults?.socialLinks.instagram}
+                          type="url"
+                          placeholder="https://..."
+                        />
+                        <Field
+                          label="Lien Google Maps"
+                          name="google"
+                          defaultValue={formDefaults?.socialLinks.google}
+                          type="url"
+                          placeholder="https://maps.app.goo.gl/..."
+                        />
+                      </div>
+                    </FormSection>
+
+                    {isAdmin && creationMode === "combined" && (
+                      <FormSection number="05" title="Instructions complémentaires pour l'IA">
+                        <TextArea
+                          label="Prompt IA"
+                          name="adminPrompt"
+                          value={adminPrompt}
+                          onChange={setAdminPrompt}
+                          rows={9}
+                          placeholder="Précisez le ton, le positionnement, les éléments à mettre en avant, l'ambiance et l'objectif commercial. Les informations du formulaire resteront prioritaires."
+                        />
+                        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                          Le nom, la ville, les coordonnées, les horaires et les services saisis
+                          dans le formulaire ne pourront pas être remplacés par le prompt.
+                        </p>
+                      </FormSection>
+                    )}
+
+                    {errors.length > 0 && (
+                      <div
+                        role="alert"
+                        className="rounded-lg border border-red-400/40 bg-red-400/10 p-5 text-sm text-red-200"
+                      >
+                        <p className="font-semibold">Certaines informations sont manquantes :</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-5">
+                          {errors.map((error) => (
+                            <li key={error}>{error}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <button
+                      type="submit"
+                      className="group label-mono flex w-full items-center justify-center gap-3 rounded-md bg-neon px-6 py-5 text-xs text-primary-foreground transition-shadow hover:shadow-[var(--shadow-neon-strong)]"
+                    >
+                      Valider mes informations
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </div>
+
+                  <TemplateAside
+                    selectedTemplate={selectedTemplate}
+                    sendsToAi={isAdmin && creationMode === "combined"}
+                  />
+                </form>
+              )}
             </>
           )}
         </main>
         <Footer />
       </div>
     </SiteContentProvider>
+  );
+}
+
+function TemplateAside({
+  selectedTemplate,
+  sendsToAi,
+}: {
+  selectedTemplate: (typeof templateRegistry)[number];
+  sendsToAi: boolean;
+}) {
+  return (
+    <aside className="sticky top-28 rounded-xl border border-border bg-card p-6">
+      <img
+        src={selectedTemplate.previewImage}
+        alt=""
+        className="aspect-[4/3] w-full rounded-md object-cover"
+      />
+      <p className="eyebrow mt-5">Modèle sélectionné</p>
+      <h2 className="font-display mt-3 text-2xl font-semibold">{selectedTemplate.name}</h2>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        {selectedTemplate.description}
+      </p>
+      <div className="mt-6 flex gap-3 border-t border-border pt-5 text-sm text-muted-foreground">
+        <ShieldCheck className="size-5 shrink-0 text-neon" />
+        <p>
+          {sendsToAi
+            ? "Les informations sont envoyées uniquement au fournisseur IA sécurisé lors de la génération."
+            : "Aucune information n'est envoyée à ce stade."}
+        </p>
+      </div>
+    </aside>
   );
 }
 
@@ -459,6 +743,8 @@ function TextArea({
   rows = 4,
   placeholder,
   defaultValue,
+  value,
+  onChange,
 }: {
   label: string;
   name: string;
@@ -466,6 +752,8 @@ function TextArea({
   rows?: number;
   placeholder?: string;
   defaultValue?: string | undefined;
+  value?: string;
+  onChange?: (value: string) => void;
 }) {
   return (
     <label>
@@ -476,7 +764,13 @@ function TextArea({
         required={required}
         rows={rows}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        {...(value !== undefined
+          ? {
+              value,
+              onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                onChange?.(event.target.value),
+            }
+          : { defaultValue })}
       />
     </label>
   );

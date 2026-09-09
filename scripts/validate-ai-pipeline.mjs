@@ -14,15 +14,28 @@ const compiled = await transformWithEsbuild(source, "site-copy.ts", {
   format: "esm",
   target: "es2022",
 });
-const { parseAndSanitizeGeneratedCopy, applyGeneratedCopy } = await import(
-  `data:text/javascript;base64,${Buffer.from(compiled.code).toString("base64")}`
-);
+const {
+  parseAndSanitizeGeneratedCopy,
+  applyGeneratedCopy,
+  applyGeneratedCopyPreservingStructuredFacts,
+} = await import(`data:text/javascript;base64,${Buffer.from(compiled.code).toString("base64")}`);
 
 for (const [templateId, activity, subtitle] of fixtures) {
   const config = JSON.parse(
     await readFile(new URL(`../templates/${templateId}/site.config.json`, import.meta.url), "utf8"),
   );
   const response = JSON.stringify({
+    businessFacts: {
+      name: config.business.name,
+      tagline: config.business.tagline,
+      activity: config.business.activity,
+      description: config.business.description,
+      phone: config.business.phone,
+      email: config.business.email,
+      address: config.business.address,
+      city: config.business.city,
+      openingHours: config.business.openingHours.join(" · "),
+    },
     heroTitle: `${activity} à ${config.business.city}`,
     heroSubtitle: subtitle,
     aboutTitle: `À propos de ${config.business.name}`,
@@ -50,6 +63,13 @@ for (const [templateId, activity, subtitle] of fixtures) {
   assert.equal(generated.seo.title, copy.seoTitle);
   assert.ok(generated.seo.description.length <= 160);
   assert.match(generated.content.hero.subtitle, /[àéèê]/i);
+
+  const contradictory = structuredClone(copy);
+  contradictory.businessFacts.city = "Bordeaux";
+  contradictory.services = [{ title: "Service inventé", description: "À ne pas conserver." }];
+  const protectedConfig = applyGeneratedCopyPreservingStructuredFacts(config, contradictory);
+  assert.equal(protectedConfig.business.city, config.business.city);
+  assert.deepEqual(protectedConfig.content.services.items, config.content.services.items);
 }
 
 console.log("Pipeline IA validé : Artisan, Restaurant et Garage.");
