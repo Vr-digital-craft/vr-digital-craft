@@ -165,16 +165,16 @@ export const siteContent: SiteContent = {
   pricing: [
     {
       id: "essentiel",
-      name: "Essentiel",
+      name: "Site modèle",
       price: "À partir de 490 €",
       features: [
-        "Site vitrine",
+        "Modèle professionnel personnalisé",
         "Jusqu'à 5 pages",
         "Responsive",
         "Prise de contact",
         "Mise en ligne",
       ],
-      cta: "Choisir Essentiel",
+      cta: "Choisir un modèle",
       featured: false,
     },
     {
@@ -182,7 +182,6 @@ export const siteContent: SiteContent = {
       name: "Premium",
       price: "À partir de 890 €",
       features: [
-        "Jusqu'à 10 pages",
         "Design personnalisé",
         "Responsive",
         "Référencement local",
