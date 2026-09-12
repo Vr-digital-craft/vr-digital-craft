@@ -42,6 +42,7 @@ function ProjectPreviewPage() {
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [validating, setValidating] = useState(false);
   const [preparing, setPreparing] = useState(false);
   const [prepared, setPrepared] = useState(false);
 
@@ -121,6 +122,21 @@ function ProjectPreviewPage() {
     }
   }
 
+  async function validateProject() {
+    if (!project || !isAdmin || validating) return;
+    setValidating(true);
+    setError("");
+    try {
+      const validatedProject = { ...project, status: "valide" as const };
+      await updateLocalProject(validatedProject);
+      setProject(validatedProject);
+    } catch {
+      setError("Le projet n'a pas pu être validé.");
+    } finally {
+      setValidating(false);
+    }
+  }
+
   if (error) return <PreviewMessage title="Prévisualisation indisponible" description={error} />;
   if (!project || !config)
     return (
@@ -155,7 +171,7 @@ function ProjectPreviewPage() {
               <CheckCircle2 className="size-4" />
               {project.status === "valide" ? "Validé" : "À contrôler"}
             </span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={downloadConfig}
@@ -164,6 +180,21 @@ function ProjectPreviewPage() {
                 <Download className="size-4" />
                 Configuration
               </button>
+              {project.status !== "valide" && (
+                <button
+                  type="button"
+                  onClick={validateProject}
+                  disabled={validating}
+                  className="label-mono flex items-center gap-2 rounded-md border border-neon px-3 py-3 text-[0.6rem] text-neon disabled:opacity-60"
+                >
+                  {validating ? (
+                    <LoaderCircle className="size-4 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="size-4" />
+                  )}
+                  {validating ? "Validation…" : "Valider le projet"}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={prepareSite}
