@@ -14,11 +14,16 @@ import {
   LockKeyhole,
   LogOut,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import { getAdminSession, loginAdmin, logoutAdmin } from "@/modules/admin/admin-auth.functions";
 import { generateSiteCopy } from "@/modules/ai/generate-site-copy.functions";
 import { applyGeneratedCopy } from "@/modules/ai/site-copy";
-import { getAllLocalProjects, updateLocalProject } from "@/modules/projects/browser-project-store";
+import {
+  deleteLocalProject,
+  getAllLocalProjects,
+  updateLocalProject,
+} from "@/modules/projects/browser-project-store";
 import type { GeneratedProject, ProjectStatus } from "@/modules/projects/generated-project";
 
 export const Route = createFileRoute("/admin")({
@@ -172,6 +177,19 @@ function AdminDashboard() {
     setProjects((current) => current.map((item) => (item.id === project.id ? updated : item)));
   }
 
+  async function deleteProject(project: GeneratedProject) {
+    const confirmed = window.confirm(
+      `Supprimer définitivement le projet « ${project.config.business.name} » ? Cette action est irréversible.`,
+    );
+    if (!confirmed) return;
+    try {
+      await deleteLocalProject(project.id);
+      setProjects((current) => current.filter((item) => item.id !== project.id));
+    } catch {
+      setError("Le projet n'a pas pu être supprimé.");
+    }
+  }
+
   return (
     <main className="min-h-screen bg-background px-4 py-6 text-foreground sm:px-8 lg:px-12 lg:py-10">
       <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 border-b border-border pb-7">
@@ -278,7 +296,12 @@ function AdminDashboard() {
           ) : (
             <div className="grid gap-4 xl:grid-cols-2">
               {visibleProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} onChange={changeProject} />
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onChange={changeProject}
+                  onDelete={deleteProject}
+                />
               ))}
             </div>
           )}
@@ -317,11 +340,14 @@ function AdminFilter({
 function ProjectCard({
   project,
   onChange,
+  onDelete,
 }: {
   project: GeneratedProject;
   onChange: (project: GeneratedProject, changes: Partial<GeneratedProject>) => Promise<void>;
+  onDelete: (project: GeneratedProject) => Promise<void>;
 }) {
   const [aiLoading, setAiLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [aiMessage, setAiMessage] = useState("");
   const date = new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(
     new Date(project.updatedAt),
@@ -422,6 +448,23 @@ function ProjectCard({
         >
           {project.archived ? <RotateCcw className="size-4" /> : <Archive className="size-4" />}
           {project.archived ? "Restaurer" : "Archiver"}
+        </button>
+        <button
+          type="button"
+          onClick={async () => {
+            setDeleting(true);
+            await onDelete(project);
+            setDeleting(false);
+          }}
+          disabled={deleting}
+          className="flex items-center gap-2 rounded-md border border-red-400/30 px-3 py-2.5 text-sm text-red-300 hover:border-red-400 disabled:opacity-60"
+        >
+          {deleting ? (
+            <LoaderCircle className="size-4 animate-spin" />
+          ) : (
+            <Trash2 className="size-4" />
+          )}
+          {deleting ? "Suppression…" : "Supprimer"}
         </button>
       </div>
       {aiMessage && (

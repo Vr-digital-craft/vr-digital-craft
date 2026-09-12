@@ -76,3 +76,16 @@ export async function updateLocalProject(project: GeneratedProject) {
   });
   database.close();
 }
+
+export async function deleteLocalProject(projectId: string) {
+  const database = await openDatabase();
+  const transaction = database.transaction(["projects", "assets"], "readwrite");
+  transaction.objectStore("projects").delete(projectId);
+  transaction.objectStore("assets").delete(projectId);
+  await new Promise<void>((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () =>
+      reject(transaction.error ?? new Error("La suppression du projet a échoué."));
+  });
+  database.close();
+}
