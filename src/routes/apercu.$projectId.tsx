@@ -19,6 +19,7 @@ import {
 import { getAdminSession } from "@/modules/admin/admin-auth.functions";
 import { getLocalProject, updateLocalProject } from "@/modules/projects/browser-project-store";
 import { exportProjectPackage } from "@/modules/projects/export-project";
+import { sendReviewNotification } from "@/modules/projects/send-review-notification.functions";
 
 export const Route = createFileRoute("/apercu/$projectId")({
   loader: () => getAdminSession(),
@@ -82,26 +83,25 @@ function ProjectPreviewPage() {
     setSending(true);
     const submittedProject = { ...project, status: "informations_recues" as const };
     try {
+      await sendReviewNotification({
+        data: {
+          projectId: project.id,
+          templateId: project.templateId,
+          companyName: project.config.business.name,
+          activity: project.config.business.activity,
+          city: project.config.business.city,
+          clientEmail: project.config.business.email,
+        },
+      });
       await updateLocalProject(submittedProject);
       setProject(submittedProject);
       setSent(true);
-      const subject = `Projet à valider — ${project.config.business.name}`;
-      const body = [
-        "Bonjour VR Digital,",
-        "",
-        "Je souhaite vous transmettre ce projet pour validation.",
-        "",
-        `Entreprise : ${project.config.business.name}`,
-        `Activité : ${project.config.business.activity}`,
-        `Ville : ${project.config.business.city}`,
-        `Modèle : ${project.templateId}`,
-        `Référence du projet : ${project.id}`,
-        "",
-        "Merci de me recontacter pour la suite.",
-      ].join("\n");
-      window.location.href = `mailto:vrdigital.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    } catch {
-      setError("Le projet n'a pas pu être préparé pour validation.");
+    } catch (notificationError) {
+      setError(
+        notificationError instanceof Error
+          ? notificationError.message
+          : "La notification n'a pas pu être envoyée.",
+      );
     } finally {
       setSending(false);
     }
@@ -192,7 +192,7 @@ function ProjectPreviewPage() {
             className="label-mono flex items-center gap-2 rounded-md bg-neon px-4 py-3 text-[0.6rem] text-primary-foreground disabled:opacity-70"
           >
             {sent ? <CheckCircle2 className="size-4" /> : <Send className="size-4" />}
-            {sending ? "Préparation…" : sent ? "E-mail préparé" : "Envoyer pour validation"}
+            {sending ? "Envoi…" : sent ? "Envoyé pour contrôle" : "Envoyer pour validation"}
           </button>
         )}
       </div>
