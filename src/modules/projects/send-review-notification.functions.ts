@@ -59,7 +59,7 @@ export const sendReviewNotification = createServerFn({ method: "POST" })
       },
       body: JSON.stringify({
         from: "VR Digital <onboarding@resend.dev>",
-        to: ["m.roger-valentin@sfr.fr"],
+        to: ["vrdigital.contact@gmail.com"],
         reply_to: data.clientEmail,
         subject,
         text,
